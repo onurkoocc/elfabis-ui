@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, Switch } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -11,6 +11,7 @@ import Home from "./Components/Home";
 import EventBus from "./Common/EventBus";
 import logoNav from "./Icons/logoNav.png"
 import Profile from "./Components/Profile";
+import AcademicianOperations from "./Components/MudekMember/AcademicianOperations";
 
 const App = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
@@ -56,6 +57,13 @@ const App = () => {
           {currentUser ? (
 
               <div className="navbar-nav collapse navbar-collapse justify-content-end">
+                  <div className="navbar-nav mr-auto">
+                      <li className="nav-item">
+                          <Link to={"/academicians"} className="nav-link">
+                              Users
+                          </Link>
+                      </li>
+                  </div>
                 <ul>
                 <li className="nav-item">
                   <Link to={"/profile"} className="nav-link">
@@ -92,9 +100,12 @@ const App = () => {
             <Routes>
                 <Route exact path={"/"} element={<Home />} />
                 <Route exact path={"/home"} element={<Home />} />
-                <Route exact path="/login" element={<Login />} />
-                <Route exact path="/register" element={<Register />} />
-                <Route exact path="/profile" element={<Profile />} />
+                    <Route exact path="/academicians" element={<AcademicianOperations />} />
+                    <Route exact path="/profile" element={<Profile />} />
+
+                    <Route exact path="/login" element={<Login />} />
+                    <Route exact path="/register" element={<Register />} />
+
             </Routes>
         </div>
         {/* <AuthVerify logOut={logOut}/> */}
