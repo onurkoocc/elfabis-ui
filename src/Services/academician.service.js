@@ -33,37 +33,6 @@ class AcademicianService {
             name,surname,username,email,role,password,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
-
-    getAllCourses = () => {
-        return axios
-            .get(API_URL + "courses", { headers: authHeader() }
-            )
-            .then((response) => {
-                return response.data;
-            });
-    };
-
-    deleteCourse = (courseId) => {
-        return axios
-            .delete(API_URL + "courses/"+courseId, { headers: authHeader() }
-            )
-            .then((response) => {
-                return response.data;
-            });
-    };
-
-    updateCourse = (id,name,code) => {
-        return axios.put(API_URL + "courses/",{
-            id,name,code,
-        },{ headers: authHeader()}).then((response)=>{return response.data});
-    };
-
-    addCourse = (name,code) => {
-        return axios.post(API_URL + "courses",{
-            name,code,
-        },{ headers: authHeader()}).then((response)=>{return response.data});
-    };
-
 }
 
 export default new AcademicianService();

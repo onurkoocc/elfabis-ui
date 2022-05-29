@@ -12,6 +12,7 @@ import EventBus from "./Common/EventBus";
 import logoNav from "./Icons/logoNav.png"
 import Profile from "./Components/Profile";
 import AcademicianOperations from "./Components/MudekMember/AcademicianOperations";
+import CourseOperations from "./Components/MudekMember/CourseOperations";
 
 const App = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
@@ -40,18 +41,18 @@ const App = () => {
     return (
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
+            <center>
           <Link to={"/"} className="navbar-brand">
-            <img  alt={"/"} src={logoNav} height={"100px"} />
-            ELFABIS
+            <img  alt={"/"} src={logoNav} height={"35px"} />
+                ELFABIS
           </Link>
+            </center>
           <div className="navbar-nav mr-auto">
-           <ul>
             <li className="nav-item">
               <Link to={"/home"} className="nav-link">
                 Home
               </Link>
             </li>
-           </ul>
           </div>
 
           {currentUser ? (
@@ -61,6 +62,13 @@ const App = () => {
                       <li className="nav-item">
                           <Link to={"/academicians"} className="nav-link">
                               Users
+                          </Link>
+                      </li>
+                  </div>
+                  <div className="navbar-nav mr-auto">
+                      <li className="nav-item">
+                          <Link to={"/courses"} className="nav-link">
+                              Courses
                           </Link>
                       </li>
                   </div>
@@ -101,6 +109,7 @@ const App = () => {
                 <Route exact path={"/"} element={<Home />} />
                 <Route exact path={"/home"} element={<Home />} />
                     <Route exact path="/academicians" element={<AcademicianOperations />} />
+                    <Route exact path="/courses" element={<CourseOperations />} />
                     <Route exact path="/profile" element={<Profile />} />
 
                     <Route exact path="/login" element={<Login />} />
