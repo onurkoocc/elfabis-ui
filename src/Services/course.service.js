@@ -31,15 +31,15 @@ class CourseService {
             });
     };
 
-    updateCourse = (id,name,code) => {
+    updateCourse = (id,name,code,coordinator) => {
         return axios.put(API_URL,{
-            id,name,code,
+            id,name,code,coordinator,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 
-    addCourse = (name,code) => {
+    addCourse = (name,code,coordinator) => {
         return axios.post(API_URL,{
-            name,code,
+            name,code,coordinator,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 

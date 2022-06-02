@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, Component} from "react";
 import CheckButton from "react-validation/build/button";
-
+import Select from 'react-select';
 import CourseService from "../../Services/course.service";
+import  AcademicianService from "../../Services/academician.service";
 import EventBus from "../../Common/EventBus";
 import {isEmail} from "validator";
 import Input from "react-validation/build/input";
@@ -9,6 +10,8 @@ import Input from "react-validation/build/input";
 
 const CourseOperations = () => {
     const [courses, setCourses] = useState([]);
+    const [selectedCoordinatorOption, setSelectedCoordinatorOption] = useState("none");
+    const [academicians, setAcademicians] = useState([]);
     const [errors, setErrors] = useState("");
     const [updatePage, setUpdatePage] = useState(false);
     const [addPage,setAddPage] = useState(false);
@@ -16,6 +19,7 @@ const CourseOperations = () => {
         id:null,
         name:null,
         code:null,
+        coordinator:{id:null, username:null},
     };
     const [courseForm, setCourseForm] = useState(courseTmp);
     useEffect(() => {
@@ -41,6 +45,34 @@ const CourseOperations = () => {
             }
         );
     }, [updatePage,addPage]);
+
+    useEffect(() => {
+        AcademicianService.getAllAcademicians().then(
+            (data) => {
+                setAcademicians(data);
+                console.log(data);
+            },
+            (error) => {
+                console.log(error);
+                const errors =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                setErrors(errors);
+
+                if (error.response && error.response.status === 401) {
+                    EventBus.dispatch("logout");
+                }
+            }
+        );
+    }, [updatePage,addPage]);
+
+    const academicianOptions = [];
+        academicians.map((academician)=> academicianOptions.push({ value: academician.id, label: academician.username }));
+
 
     const onDelete = (courseId) => {
         CourseService.deleteCourse(courseId).then(
@@ -70,6 +102,14 @@ const CourseOperations = () => {
     const onChangeCode = event => {
         setCourseForm({ ...courseForm,code:event.target.value})
     }
+    const onChangeAcademician = event => {
+        setCourseForm({ ...courseForm,coordinator: {id: event.target.value}})
+    }
+
+    const handleCoordinatorTypeSelect = e => {
+        setSelectedCoordinatorOption(e.value);
+        setCourseForm({ ...courseForm,coordinator: {id: e.value, username:e.label}});
+    };
 
 
 
@@ -78,10 +118,10 @@ const CourseOperations = () => {
 
             name:courseForm.name,
             code:courseForm.code,
-
+            coordinator: courseForm.coordinator,
         };
 
-        CourseService.addCourse(courseForm.name,courseForm.code)
+        CourseService.addCourse(courseForm.name,courseForm.code,courseForm.coordinator)
             .then(data => {
                 setCourseForm(courseTmp);
                 setAddPage(false);
@@ -97,9 +137,10 @@ const CourseOperations = () => {
             id:courseForm.id,
             name:courseForm.name,
             code:courseForm.code,
+            coordinator: courseForm.coordinator,
         };
 
-        CourseService.updateCourse(courseForm.id,courseForm.name,courseForm.code)
+        CourseService.updateCourse(courseForm.id,courseForm.name,courseForm.code, courseForm.coordinator)
             .then(data => {
                 setCourseForm(courseTmp);
                 setUpdatePage(false);
@@ -115,6 +156,7 @@ const CourseOperations = () => {
             id:course.id,
             name:course.name,
             code:course.code,
+            coordinator: course.coordinator,
         });
         setUpdatePage(true);
     };
@@ -146,13 +188,22 @@ const CourseOperations = () => {
                                                 <tr>
                                                     <th>NAME</th>
                                                     <th>CODE</th>
-                                                    <th>ADD</th>
+                                                    <th>COORDINATOR</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <tr>
                                                     <td><input className="form-control input-sm" value={courseForm.name} onChange={onChangeName}/></td>
                                                     <td><input className="form-control input-sm" value={courseForm.code} onChange={onChangeCode}/></td>
+                                                    <td><Select
+                                                        options={academicianOptions}
+                                                        onChange={handleCoordinatorTypeSelect}
+                                                        value={academicianOptions.filter(function(option) {
+                                                            return option.value === courseForm.coordinator;
+                                                        })}
+                                                        label="adasd"
+
+                                                    /></td>
                                                     <td><button className="btn btn-success" onClick={() => addCourse()}>SAVE</button></td>
                                                 </tr>
                                                 </tbody>
@@ -221,6 +272,18 @@ const CourseOperations = () => {
                                 onChange={onChangeCode}
                                 name="code"
                             />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="coordinator">Coordinator</label>
+                            <td><Select
+                                options={academicianOptions}
+                                onChange={handleCoordinatorTypeSelect}
+                                value={academicianOptions.filter(function(option) {
+                                    return option.value === courseForm.coordinator;
+                                })}
+                                label="adasd"
+
+                            /></td>
                         </div>
 
                         <button onClick={updateCourse} className="btn btn-success">
