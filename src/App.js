@@ -13,6 +13,7 @@ import logoNav from "./Icons/logoNav.png"
 import Profile from "./Components/Profile";
 import AcademicianOperations from "./Components/MudekMember/AcademicianOperations";
 import CourseOperations from "./Components/MudekMember/CourseOperations";
+import GivenCourseOperations from "./Components/MudekMember/GivenCourseOperations";
 
 const App = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
@@ -72,6 +73,13 @@ const App = () => {
                           </Link>
                       </li>
                   </div>
+                  <div className="navbar-nav mr-auto">
+                      <li className="nav-item">
+                          <Link to={"/givenCourses"} className="nav-link">
+                              Given Courses
+                          </Link>
+                      </li>
+                  </div>
                 <ul>
                 <li className="nav-item">
                   <Link to={"/profile"} className="nav-link">
@@ -110,7 +118,9 @@ const App = () => {
                 <Route exact path={"/home"} element={<Home />} />
                     <Route exact path="/academicians" element={<AcademicianOperations />} />
                     <Route exact path="/courses" element={<CourseOperations />} />
+                    <Route exact path="/givenCourses" element={<GivenCourseOperations />} />
                     <Route exact path="/profile" element={<Profile />} />
+
 
                     <Route exact path="/login" element={<Login />} />
                     <Route exact path="/register" element={<Register />} />

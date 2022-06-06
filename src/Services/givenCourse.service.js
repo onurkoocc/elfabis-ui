@@ -1,10 +1,10 @@
 import axios from "axios";
 import authHeader from "./auth-header";
-const API_URL = "http://localhost:9090/courses";
+const API_URL = "http://localhost:9090/givenCourses";
 
-class CourseService {
+class GivenCourseService {
 
-    getAllCourses = () => {
+    getAllGivenCourses = () => {
         return axios
             .get(API_URL , { headers: authHeader() }
             )
@@ -13,36 +13,36 @@ class CourseService {
             });
     };
 
-    deleteCourse = (courseId) => {
+    deleteGivenCourse = (givenCourseId) => {
         return axios
-            .delete(API_URL +"/"+courseId, { headers: authHeader() }
+            .delete(API_URL +"/"+givenCourseId, { headers: authHeader() }
             )
             .then((response) => {
                 return response.data;
             });
     };
 
-    getCourse = (courseId) => {
+    getGivenCourse = (givenCourseId) => {
         return axios
-            .get(API_URL +courseId, { headers: authHeader() }
+            .get(API_URL +givenCourseId, { headers: authHeader() }
             )
             .then((response) => {
                 return response.data;
             });
     };
 
-    updateCourse = (id,code,name,type,abd,coordinator,bolognaLink,category,plan,equivalent,equivalentCourse) => {
+    updateGivenCourse = (id,course,lecturer,year,semester,group) => {
         return axios.put(API_URL,{
-            id,code,name,type,abd,coordinator,bolognaLink,category,plan,equivalent,equivalentCourse,
+            id,course,lecturer,year,semester,group,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 
-    addCourse = (code,name,type,abd,coordinator,bolognaLink,category,plan,equivalent,equivalentCourse) => {
+    addGivenCourse = (course,lecturer,year,semester,group) => {
         return axios.post(API_URL,{
-            code,name,type,abd,coordinator,bolognaLink,category,plan,equivalent,equivalentCourse
+            course,lecturer,year,semester,group,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 
 
 }
-export default new CourseService();
+export default new GivenCourseService();

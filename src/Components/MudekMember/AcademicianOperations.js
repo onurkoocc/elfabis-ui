@@ -8,12 +8,13 @@ const AcademicianOperations = () => {
     const [addPage,setAddPage] = useState(false);
     const userTmp ={
         id:"",
-        name:"",
-        surname:"",
         username: "",
         email:"",
         role:"",
-        password:"",
+        name:"",
+        title:"",
+        abd:"",
+        abbr:"",
     };
     const [userForm, setUserForm] = useState(userTmp);
 
@@ -57,9 +58,6 @@ const AcademicianOperations = () => {
     const onChangeName = event => {
         setUserForm({ ...userForm,name:event.target.value})
     }
-    const onChangeSurname = event => {
-        setUserForm({ ...userForm,surname:event.target.value})
-    }
     const onChangeUsername = event => {
         setUserForm({ ...userForm,username:event.target.value})
     }
@@ -69,12 +67,18 @@ const AcademicianOperations = () => {
     const onChangeEmail = event => {
         setUserForm({ ...userForm,email:event.target.value})
     }
-    const onChangePassword = event => {
-        setUserForm({ ...userForm,password:event.target.value})
+    const onChangeTitle = event => {
+        setUserForm({ ...userForm,title:event.target.value})
+    }
+    const onChangeAbbr = event => {
+        setUserForm({ ...userForm,abbr:event.target.value})
+    }
+    const onChangeAbd = event => {
+        setUserForm({ ...userForm,Abd:event.target.value})
     }
 
     const addAcademician = () => {
-        AcademicianService.addAcademician(userForm.name,userForm.surname,userForm.username,userForm.email,userForm.role,userForm.password)
+        AcademicianService.addAcademician(userForm.username,userForm.email,userForm.role,userForm.name,userForm.title,userForm.abd,userForm.abbr)
             .then(data => {
                 setUserForm(userTmp);
                 setAddPage(false);
@@ -87,7 +91,7 @@ const AcademicianOperations = () => {
 
     const updateAcademician = () => {
 
-        AcademicianService.updateAcademician(userForm.id,userForm.name,userForm.surname,userForm.username,userForm.email,userForm.role)
+        AcademicianService.updateAcademician(userForm.id,userForm.username,userForm.email,userForm.role,userForm.name,userForm.title,userForm.abd,userForm.abbr)
             .then(data => {
                 setUserForm(userTmp);
                 setUpdatePage(false);
@@ -101,12 +105,13 @@ const AcademicianOperations = () => {
         setUserForm(userTmp);
         setUserForm({ ...userForm,
             id:user.id,
-            name:user.name,
-            surname:user.surname,
-            username:user.username,
+            username: user.username,
             email:user.email,
-            password:user.password,
             role:user.role.name,
+            name:user.name,
+            title:user.title,
+            abd:user.abd,
+            abbr:user.abbr,
         });
         setUpdatePage(true);
     };
@@ -136,23 +141,25 @@ const AcademicianOperations = () => {
                                             <table className="table">
                                                 <thead>
                                                 <tr>
+                                                    <th>TITLE</th>
                                                     <th>NAME</th>
-                                                    <th>SURNAME</th>
                                                     <th>USERNAME</th>
                                                     <th>EMAİL</th>
                                                     <th>ROLE</th>
-                                                    <th>PASSWORD</th>
+                                                    <th>ABD</th>
+                                                    <th>ABBR</th>
                                                     <th>ADD</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <tr>
+                                                    <td><input className="form-control input-sm" value={userForm.title} onChange={onChangeTitle}/></td>
                                                     <td><input className="form-control input-sm" value={userForm.name} onChange={onChangeName}/></td>
-                                                    <td><input className="form-control input-sm" value={userForm.surname} onChange={onChangeSurname}/></td>
                                                     <td><input className="form-control input-sm" value={userForm.username} onChange={onChangeUsername}/></td>
                                                     <td><input className="form-control input-sm" value={userForm.email} onChange={onChangeEmail}/></td>
                                                     <td><input className="form-control input-sm" value={userForm.role} onChange={onChangeRole}/></td>
-                                                    <td><input className="form-control input-sm" value={userForm.password} onChange={onChangePassword}/></td>
+                                                    <td><input className="form-control input-sm" value={userForm.abd} onChange={onChangeAbd}/></td>
+                                                    <td><input className="form-control input-sm" value={userForm.abbr} onChange={onChangeAbbr}/></td>
                                                     <td><button className="btn btn-success" onClick={() => addAcademician()}>SAVE</button></td>
                                                 </tr>
                                                 </tbody>
@@ -166,11 +173,13 @@ const AcademicianOperations = () => {
                                 <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>TITLE</th>
                                     <th>NAME</th>
-                                    <th>SURNAME</th>
                                     <th>USERNAME</th>
                                     <th>EMAİL</th>
                                     <th>ROLE</th>
+                                    <th>ABD</th>
+                                    <th>ABBR</th>
                                     <th>DELETE</th>
                                     <th>UPDATE</th>
                                 </tr>
@@ -179,11 +188,13 @@ const AcademicianOperations = () => {
                                 {users.map(user => (
                                     <tr key={user.id}>
                                         <td>{user.id}</td>
+                                        <td>{user.title}</td>
                                         <td>{user.name}</td>
-                                        <td>{user.surname}</td>
                                         <td>{user.username}</td>
                                         <td>{user.email}</td>
                                         <td>{user.role.name}</td>
+                                        <td>{user.abd}</td>
+                                        <td>{user.abbr}</td>
                                         <td><button className="btn btn-danger" onClick={() => onDelete(user.id)}>DELETE</button></td>
                                         <td><button className="btn btn-primary" onClick={() => newUpdateForm(user)}>UPDATE</button></td>
                                     </tr>
@@ -204,6 +215,18 @@ const AcademicianOperations = () => {
                             <h1 id="id">{userForm.id}</h1>
                         </div>
                         <div className="form-group">
+                            <label htmlFor="title">Title</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="title"
+                                required
+                                value={userForm.title}
+                                onChange={onChangeTitle}
+                                name="title"
+                            />
+                        </div>
+                        <div className="form-group">
                             <label htmlFor="name">Name</label>
                             <input
                                 type="text"
@@ -217,18 +240,6 @@ const AcademicianOperations = () => {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="surname">Surname</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="surname"
-                                required
-                                value={userForm.surname}
-                                onChange={onChangeSurname}
-                                name="surname"
-                            />
-                        </div>
-                        <div className="form-group">
                             <label htmlFor="username">Username</label>
                             <input
                                 type="text"
@@ -240,6 +251,7 @@ const AcademicianOperations = () => {
                                 name="username"
                             />
                         </div>
+
                         <div className="form-group">
                             <label htmlFor="email">E-mail</label>
                             <input
@@ -265,6 +277,34 @@ const AcademicianOperations = () => {
                                 name="role"
                             />
                         </div>
+
+                        <div className="form-group">
+                            <label htmlFor="abd">ABD</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="abd"
+                                required
+                                value={userForm.abd}
+                                onChange={onChangeAbd}
+                                name="abd"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="abbr">ABBR</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="abbr"
+                                required
+                                value={userForm.abbr}
+                                onChange={onChangeAbbr}
+                                name="abbr"
+                            />
+                        </div>
+
+
 
                         <button onClick={()=>updateAcademician()} className="btn btn-success">
                             Save

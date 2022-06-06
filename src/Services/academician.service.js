@@ -22,15 +22,15 @@ class AcademicianService {
             });
     };
 
-    updateAcademician = (id,name,surname,username,email,role) => {
+    updateAcademician = (id,username,email,role,name,title,abd,abbr) => {
         return axios.put(API_URL + "/updateacademician",{
-            id,name,surname,username,email,role,
+            id,username,email,role,name,title,abd,abbr,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 
-    addAcademician = (name,surname,username,email,role,password) => {
+    addAcademician = (username,email,role,name,title,abd,abbr) => {
         return axios.post(API_URL + "/addacademician",{
-            name,surname,username,email,role,password,
+            username,email,role,name,title,abd,abbr,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 }

@@ -3,6 +3,8 @@ import CheckButton from "react-validation/build/button";
 import Select from 'react-select';
 import CourseService from "../../Services/course.service";
 import  AcademicianService from "../../Services/academician.service";
+import  EquivalentCourseService from "../../Services/equivalentCourse.service";
+import  PlanService from "../../Services/plan.service";
 import EventBus from "../../Common/EventBus";
 import {isEmail} from "validator";
 import Input from "react-validation/build/input";
@@ -11,21 +13,76 @@ import Input from "react-validation/build/input";
 const CourseOperations = () => {
     const [courses, setCourses] = useState([]);
     const [selectedCoordinatorOption, setSelectedCoordinatorOption] = useState("none");
+    const [selectedEquivalentCourseOption, setSelectedEquivalentCourseOption] = useState("none");
+    const [selectedPlanOption, setSelectedPlanOption] = useState("none");
     const [academicians, setAcademicians] = useState([]);
+    const [equivalentCourses, setEquivalentCourses] = useState([]);
+    const [plans, setPlans] = useState([]);
     const [errors, setErrors] = useState("");
     const [updatePage, setUpdatePage] = useState(false);
     const [addPage,setAddPage] = useState(false);
+    const coordinatorTmp ={
+        id:"",
+        username: "",
+        email:"",
+        role:"",
+        name:"",
+        title:"",
+        abd:"",
+        abbr:"",
+    };
+    const planTmp ={
+        id:"",
+        name:"",
+    };
+    const equivalentCourseTmp ={
+        id:"",
+        name:"",
+    };
     const courseTmp ={
-        id:null,
-        name:null,
-        code:null,
-        coordinator:{id:null, username:null},
+        id:"",
+        code:"",
+        name:"",
+        type:"",
+        abd:"",
+        coordinator:coordinatorTmp,
+        bolognaLink:"",
+        category:"",
+        plan:planTmp,
+        equivalent:"",
+        equivalentCourse:equivalentCourseTmp,
     };
     const [courseForm, setCourseForm] = useState(courseTmp);
+
+
     useEffect(() => {
-        CourseService.getAllCourses().then(
+        EquivalentCourseService.getAllEquivalentCourses().then(
             (data) => {
-                setCourses(data);
+                setEquivalentCourses(data);
+                console.log(data);
+            },
+            (error) => {
+                console.log(error);
+                const errors =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                setErrors(errors);
+
+                if (error.response && error.response.status === 401) {
+                    EventBus.dispatch("logout");
+                }
+            }
+        );
+    }, [updatePage,addPage]);
+
+    useEffect(() => {
+        PlanService.getAllPlans().then(
+            (data) => {
+                setPlans(data);
                 console.log(data);
             },
             (error) => {
@@ -69,9 +126,41 @@ const CourseOperations = () => {
             }
         );
     }, [updatePage,addPage]);
+    useEffect(() => {
+        CourseService.getAllCourses().then(
+            (data) => {
+                setCourses(data);
+                console.log(data);
+            },
+            (error) => {
+                console.log(error);
+                const errors =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                setErrors(errors);
+
+                if (error.response && error.response.status === 401) {
+                    EventBus.dispatch("logout");
+                }
+            }
+        );
+    }, [updatePage,addPage]);
+
+
+
 
     const academicianOptions = [];
         academicians.map((academician)=> academicianOptions.push({ value: academician.id, label: academician.username }));
+
+    const equivalentCoursesOptions = [];
+    equivalentCourses.map((equivalentCourse)=> equivalentCoursesOptions.push({ value: equivalentCourse.id, label: equivalentCourse.name }));
+
+    const plansOptions = [];
+    plans.map((plan)=> plansOptions.push({ value: plan.id, label: plan.name }));
 
 
     const onDelete = (courseId) => {
@@ -96,14 +185,35 @@ const CourseOperations = () => {
             }
         );
     };
-    const onChangeName = event => {
-        setCourseForm({ ...courseForm,name:event.target.value})
-    }
     const onChangeCode = event => {
         setCourseForm({ ...courseForm,code:event.target.value})
     }
+    const onChangeName = event => {
+        setCourseForm({ ...courseForm,name:event.target.value})
+    }
+    const onChangeType = event => {
+        setCourseForm({ ...courseForm,type:event.target.value})
+    }
+    const onChangeAbd = event => {
+        setCourseForm({ ...courseForm,abd:event.target.value})
+    }
     const onChangeAcademician = event => {
         setCourseForm({ ...courseForm,coordinator: {id: event.target.value}})
+    }
+    const onChangeBolognaLink = event => {
+        setCourseForm({ ...courseForm,bolognaLink: event.target.value})
+    }
+    const onChangeCategory = event => {
+        setCourseForm({ ...courseForm,category: event.target.value})
+    }
+    const onChangePlan = event => {
+        setCourseForm({ ...courseForm,plan: {id: event.target.value}})
+    }
+    const onChangeEquivalent = event => {
+        setCourseForm({ ...courseForm,equivalent: event.target.value})
+    }
+    const onChangeEquivalentCourse = event => {
+        setCourseForm({ ...courseForm,equivalentCourse: {id: event.target.value}})
     }
 
     const handleCoordinatorTypeSelect = e => {
@@ -111,17 +221,35 @@ const CourseOperations = () => {
         setCourseForm({ ...courseForm,coordinator: {id: e.value, username:e.label}});
     };
 
+    const handlePlanSelect = e => {
+        setSelectedPlanOption(e.value);
+        setCourseForm({ ...courseForm,plan: {id: e.value, name:e.label}});
+    };
+
+    const handleEquivalentCourseSelect = e => {
+        setSelectedEquivalentCourseOption(e.value);
+        setCourseForm({ ...courseForm,equivalentCourse: {id: e.value, name:e.label}});
+    };
+
 
 
     const addCourse = () => {
         var data = {
-
-            name:courseForm.name,
             code:courseForm.code,
+            name:courseForm.name,
+            type:courseForm.type,
+            abd:courseForm.abd,
             coordinator: courseForm.coordinator,
+            bolognaLink: courseForm.bolognaLink,
+            category: courseForm.category,
+            plan: courseForm.plan,
+            equivalent: courseForm.equivalent,
+            equivalentCourse: courseForm.equivalentCourse,
         };
 
-        CourseService.addCourse(courseForm.name,courseForm.code,courseForm.coordinator)
+        CourseService.addCourse(courseForm.code,courseForm.name,courseForm.type,
+            courseForm.abd,courseForm.coordinator,courseForm.bolognaLink,courseForm.category,courseForm.plan,
+            courseForm.equivalent,courseForm.equivalentCourse)
             .then(data => {
                 setCourseForm(courseTmp);
                 setAddPage(false);
@@ -135,12 +263,21 @@ const CourseOperations = () => {
     const updateCourse = () => {
         var data = {
             id:courseForm.id,
-            name:courseForm.name,
             code:courseForm.code,
+            name:courseForm.name,
+            type:courseForm.type,
+            abd:courseForm.abd,
             coordinator: courseForm.coordinator,
+            bolognaLink: courseForm.bolognaLink,
+            category: courseForm.category,
+            plan: courseForm.plan,
+            equivalent: courseForm.equivalent,
+            equivalentCourse: courseForm.equivalentCourse,
         };
 
-        CourseService.updateCourse(courseForm.id,courseForm.name,courseForm.code, courseForm.coordinator)
+        CourseService.updateCourse(courseForm.id,courseForm.code,courseForm.name,courseForm.type,
+            courseForm.abd,courseForm.coordinator,courseForm.bolognaLink,courseForm.category,courseForm.plan,
+            courseForm.equivalent,courseForm.equivalentCourse)
             .then(data => {
                 setCourseForm(courseTmp);
                 setUpdatePage(false);
@@ -154,9 +291,16 @@ const CourseOperations = () => {
         setCourseForm(courseTmp);
         setCourseForm({ ...courseForm,
             id:course.id,
-            name:course.name,
             code:course.code,
+            name:course.name,
+            type:course.type,
+            abd:course.abd,
             coordinator: course.coordinator,
+            bolognaLink: course.bolognaLink,
+            category: course.category,
+            plan: course.plan,
+            equivalent: course.equivalent,
+            equivalentCourse: course.equivalentCourse,
         });
         setUpdatePage(true);
     };
@@ -186,24 +330,49 @@ const CourseOperations = () => {
                                             <table className="table">
                                                 <thead>
                                                 <tr>
-                                                    <th>NAME</th>
                                                     <th>CODE</th>
+                                                    <th>NAME</th>
+                                                    <th>TYPE</th>
+                                                    <th>ABD</th>
                                                     <th>COORDINATOR</th>
+                                                    <th>BOLOGNA LINK</th>
+                                                    <th>CATEGORY</th>
+                                                    <th>PLAN</th>
+                                                    <th>EQUIVALENT</th>
+                                                    <th>EQUIVALENT COURSE</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <tr>
-                                                    <td><input className="form-control input-sm" value={courseForm.name} onChange={onChangeName}/></td>
                                                     <td><input className="form-control input-sm" value={courseForm.code} onChange={onChangeCode}/></td>
-                                                    <td><Select
+                                                    <td><input className="form-control input-sm" value={courseForm.name} onChange={onChangeName}/></td>
+                                                    <td><input className="form-control input-sm" value={courseForm.type} onChange={onChangeType}/></td>
+                                                    <td><input className="form-control input-sm" value={courseForm.abd} onChange={onChangeAbd}/></td>
+                                                    <td><Select className="form-control" name="coordinator"
                                                         options={academicianOptions}
                                                         onChange={handleCoordinatorTypeSelect}
-                                                        value={academicianOptions.filter(function(option) {
-                                                            return option.value === courseForm.coordinator;
-                                                        })}
-                                                        label="adasd"
-
+                                                                value={academicianOptions.filter(function(option) {
+                                                                    return option.value === selectedCoordinatorOption;
+                                                                })}
+                                                    />
+                                                    </td>
+                                                    <td><input className="form-control input-sm" value={courseForm.bolognaLink} onChange={onChangeBolognaLink}/></td>
+                                                    <td><input className="form-control input-sm" value={courseForm.category} onChange={onChangeCategory}/></td>
+                                                    <td><Select className="form-control" name="plan"
+                                                                options={plansOptions}
+                                                                onChange={handlePlanSelect}
+                                                                value={plansOptions.filter(function(option) {
+                                                                    return option.value === selectedPlanOption;
+                                                                })}
                                                     /></td>
+                                                    <td><CheckButton className="form-control input-sm" value={courseForm.equivalent} onChange={onChangeEquivalent}/></td>
+                                                    <td><Select className="form-control" name="equivalentCourse"
+                                                                options={equivalentCoursesOptions}
+                                                                onChange={handleEquivalentCourseSelect}
+                                                                value={equivalentCoursesOptions.filter(function(option) {
+                                                                    return option.value === selectedEquivalentCourseOption;
+                                                                })}/>
+                                                    </td>
                                                     <td><button className="btn btn-success" onClick={() => addCourse()}>SAVE</button></td>
                                                 </tr>
                                                 </tbody>
@@ -217,8 +386,16 @@ const CourseOperations = () => {
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>NAME</th>
                                     <th>CODE</th>
+                                    <th>NAME</th>
+                                    <th>TYPE</th>
+                                    <th>ABD</th>
+                                    <th>COORDINATOR</th>
+                                    <th>BOLOGNA LINK</th>
+                                    <th>CATEGORY</th>
+                                    <th>PLAN</th>
+                                    <th>EQUIVALENT</th>
+                                    <th>EQUIVALENT COURSE</th>
                                     <th>DELETE</th>
                                     <th>UPDATE</th>
                                 </tr>
@@ -227,8 +404,16 @@ const CourseOperations = () => {
                                 {courses.map(course => (
                                     <tr key={course.id}>
                                         <td>{course.id}</td>
-                                        <td>{course.name}</td>
                                         <td>{course.code}</td>
+                                        <td>{course.name}</td>
+                                        <td>{course.type}</td>
+                                        <td>{course.abd}</td>
+                                        <td>{(course.coordinator!=null)?course.coordinator.name:null}</td>
+                                        <td>{course.bolognaLink}</td>
+                                        <td>{course.category}</td>
+                                        <td>{(course.plan!=null)?course.plan.name:null}</td>
+                                        <td>{course.equivalent}</td>
+                                        <td>{(course.equivalentCourse!=null)?course.equivalentCourse.name:null}</td>
                                         <td><button className="btn btn-danger" onClick={() => onDelete(course.id)}>DELETE</button></td>
                                         <td><button className="btn btn-primary" onClick={() => newUpdateForm(course)}>UPDATE</button></td>
                                     </tr>
@@ -248,6 +433,20 @@ const CourseOperations = () => {
                             <label htmlFor="id">ID</label>
                             <h1 id="id">{courseForm.id}</h1>
                         </div>
+
+                        <div className="form-group">
+                            <label htmlFor="code">Code</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="code"
+                                required
+                                value={courseForm.code}
+                                onChange={onChangeCode}
+                                name="code"
+                            />
+                        </div>
+
                         <div className="form-group">
                             <label htmlFor="name">Name</label>
                             <input
@@ -262,28 +461,96 @@ const CourseOperations = () => {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="code">Code</label>
+                            <label htmlFor="type">Type</label>
                             <input
                                 type="text"
                                 className="form-control"
-                                id="code"
+                                id="type"
                                 required
-                                value={courseForm.code}
-                                onChange={onChangeCode}
-                                name="code"
+                                value={courseForm.type}
+                                onChange={onChangeType}
+                                name="type"
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="coordinator">Coordinator</label>
-                            <td><Select
-                                options={academicianOptions}
-                                onChange={handleCoordinatorTypeSelect}
-                                value={academicianOptions.filter(function(option) {
-                                    return option.value === courseForm.coordinator;
-                                })}
-                                label="adasd"
+                            <label htmlFor="abd">ABD</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="abd"
+                                required
+                                value={courseForm.abd}
+                                onChange={onChangeAbd}
+                                name="abd"
+                            />
+                        </div>
 
-                            /></td>
+                        <div className="form-group">
+                            <label htmlFor="coordinator">Coordinator</label>
+                            <Select className="form-control" name="coordinator"
+                                    options={academicianOptions}
+                                    onChange={handleCoordinatorTypeSelect}
+                                    value={academicianOptions.filter(function(option) {
+                                        return option.value === selectedCoordinatorOption;
+                                    })}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="bolognaLink">Bologna Link</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="bolognaLink"
+                                required
+                                value={courseForm.bolognaLink}
+                                onChange={onChangeBolognaLink}
+                                name="bolognaLink"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="category">Category</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="category"
+                                required
+                                value={courseForm.category}
+                                onChange={onChangeCategory}
+                                name="category"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="plan">Plan</label>
+                            <Select className="form-control" name="plan"
+                                    options={plansOptions}
+                                    onChange={handlePlanSelect}
+                                    value={plansOptions.filter(function(option) {
+                                        return option.value === selectedPlanOption;
+                                    })}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="equivalent">Equivalent</label>
+                            <input
+                                type="checkbox"
+                                className="form-control"
+                                id="equivalent"
+                                required
+                                value={courseForm.equivalent}
+                                onChange={onChangeEquivalent}
+                                name="equivalent"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="equivalentCourse">Equivalent Course</label>
+                            <Select className="form-control" name="equivalentCourse"
+                                    options={equivalentCoursesOptions}
+                                    onChange={handleEquivalentCourseSelect}
+                                    value={equivalentCoursesOptions.filter(function(option) {
+                                        return option.value === selectedEquivalentCourseOption;
+                                    })}
+                            />
                         </div>
 
                         <button onClick={updateCourse} className="btn btn-success">
@@ -291,7 +558,11 @@ const CourseOperations = () => {
                         </button>
                     </div>
                 )}
+            <div>
+                <br/>
+                <br/>
 
+            </div>
         </div>
 
     );

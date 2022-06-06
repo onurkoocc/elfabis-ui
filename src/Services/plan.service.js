@@ -1,10 +1,10 @@
 import axios from "axios";
 import authHeader from "./auth-header";
-const API_URL = "http://localhost:9090/courses";
+const API_URL = "http://localhost:9090/plans";
 
-class CourseService {
+class PlanService {
 
-    getAllCourses = () => {
+    getAllPlans = () => {
         return axios
             .get(API_URL , { headers: authHeader() }
             )
@@ -13,36 +13,36 @@ class CourseService {
             });
     };
 
-    deleteCourse = (courseId) => {
+    deletePlan = (planId) => {
         return axios
-            .delete(API_URL +"/"+courseId, { headers: authHeader() }
+            .delete(API_URL +"/"+planId, { headers: authHeader() }
             )
             .then((response) => {
                 return response.data;
             });
     };
 
-    getCourse = (courseId) => {
+    getPlan = (planId) => {
         return axios
-            .get(API_URL +courseId, { headers: authHeader() }
+            .get(API_URL +planId, { headers: authHeader() }
             )
             .then((response) => {
                 return response.data;
             });
     };
 
-    updateCourse = (id,code,name,type,abd,coordinator,bolognaLink,category,plan,equivalent,equivalentCourse) => {
+    updatePlan = (id,name) => {
         return axios.put(API_URL,{
-            id,code,name,type,abd,coordinator,bolognaLink,category,plan,equivalent,equivalentCourse,
+            id,name,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 
-    addCourse = (code,name,type,abd,coordinator,bolognaLink,category,plan,equivalent,equivalentCourse) => {
+    addPlan = (name) => {
         return axios.post(API_URL,{
-            code,name,type,abd,coordinator,bolognaLink,category,plan,equivalent,equivalentCourse
+            name,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 
 
 }
-export default new CourseService();
+export default new PlanService();
