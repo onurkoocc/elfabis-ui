@@ -133,6 +133,12 @@ const GivenCourseOperations = () => {
     const onChangeGroup = event => {
         setGivenCourseForm({...givenCourseForm, group: event.target.value})
     }
+    const onChangeCourse = event => {
+        setGivenCourseForm({...givenCourseForm, course:{id: event.target.value}})
+    }
+    const onChangeLecturer = event => {
+        setGivenCourseForm({...givenCourseForm, lecturer:{id: event.target.value}})
+    }
 
     const handleCourseSelect = e => {
         setSelectedCourseOption(e.value);
@@ -297,7 +303,7 @@ const GivenCourseOperations = () => {
                                         <td>{givenCourse.lecturer != null ? givenCourse.lecturer.username : null}</td>
                                         <td>{givenCourse.year}</td>
                                         <td>{givenCourse.semester}</td>
-                                        <td>{givenCourse.group}</td>
+                                        <td>{givenCourse.courseGroup}</td>
                                         <td>
                                             <button className="btn btn-danger"
                                                     onClick={() => onDelete(givenCourse.id)}>DELETE

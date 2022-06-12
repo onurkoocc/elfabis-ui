@@ -33,13 +33,13 @@ class GivenCourseService {
 
     updateGivenCourse = (id,course,lecturer,year,semester,group) => {
         return axios.put(API_URL,{
-            id,course,lecturer,year,semester,group,
+            "id":id,"lecturerId":lecturer.id,"courseId":course.id,"year":year,"semester":semester,"courseGroup":group
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 
     addGivenCourse = (course,lecturer,year,semester,group) => {
         return axios.post(API_URL,{
-            course,lecturer,year,semester,group,
+            "lecturer":{"id":lecturer.id},"course":{"id":course.id},"year":year,"semester":semester,"courseGroup":group
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 
