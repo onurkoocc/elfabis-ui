@@ -15,6 +15,8 @@ import AcademicianOperations from "./Components/MudekMember/AcademicianOperation
 import CourseOperations from "./Components/MudekMember/CourseOperations";
 import GivenCourseOperations from "./Components/MudekMember/GivenCourseOperations";
 import FormTrackingOperations from "./Components/MudekMember/FormTrackingOperations";
+import EquivalentCourseOperations from "./Components/MudekMember/EquivalentCourseOperations";
+import PlanOperations from "./Components/MudekMember/PlanOperations";
 const App = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
 
@@ -87,6 +89,20 @@ const App = () => {
                           </Link>
                       </li>
                   </div>
+                  <div className="navbar-nav mr-auto">
+                      <li className="nav-item">
+                          <Link to={"/plans"} className="nav-link">
+                              Plan
+                          </Link>
+                      </li>
+                  </div>
+                  <div className="navbar-nav mr-auto">
+                      <li className="nav-item">
+                          <Link to={"/equivalentcourses"} className="nav-link">
+                              Equivalent Course
+                          </Link>
+                      </li>
+                  </div>
                 <ul>
                 <li className="nav-item">
                   <Link to={"/profile"} className="nav-link">
@@ -127,6 +143,8 @@ const App = () => {
                     <Route exact path="/courses" element={<CourseOperations />} />
                     <Route exact path="/givenCourses" element={<GivenCourseOperations />} />
                     <Route exact path="/formTrackings" element={<FormTrackingOperations />} />
+                <Route exact path="/equivalentcourses" element={<EquivalentCourseOperations />} />
+                <Route exact path="/plans" element={<PlanOperations />} />
                     <Route exact path="/profile" element={<Profile />} />
 
 

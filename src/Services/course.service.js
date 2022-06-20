@@ -33,13 +33,15 @@ class CourseService {
 
     updateCourse = (id,code,name,type,abd,coordinator,bolognaLink,category,plan,equivalent,equivalentCourse) => {
         return axios.put(API_URL,{
-            id,code,name,type,abd,coordinator,bolognaLink,category,plan,equivalent,equivalentCourse,
+            "id":id,"code":code,"name":name,"type":type,"abd":abd,"coordinator":coordinator
+            ,"bolognaLink":bolognaLink,"category":category,"plan":plan,"equivalent":equivalent,"equivalentCourse":equivalentCourse,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 
     addCourse = (code,name,type,abd,coordinator,bolognaLink,category,plan,equivalent,equivalentCourse) => {
         return axios.post(API_URL,{
-            code,name,type,abd,coordinator,bolognaLink,category,plan,equivalent,equivalentCourse
+            "code":code,"name":name,"type":type,"abd":abd,"coordinator":coordinator
+            ,"bolognaLink":bolognaLink,"category":category,"plan":plan,"equivalent":equivalent,"equivalentCourse":equivalentCourse,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 

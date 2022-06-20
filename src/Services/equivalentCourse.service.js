@@ -33,13 +33,13 @@ class EquivalentCourseService {
 
     updateEquivalentCourse = (id,name) => {
         return axios.put(API_URL,{
-            id,name,
+            "id":id,"name":name,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 
     addEquivalentCourse = (name) => {
         return axios.post(API_URL,{
-            name,
+            "name":name,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 

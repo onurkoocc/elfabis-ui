@@ -21,36 +21,18 @@ const CourseOperations = () => {
     const [errors, setErrors] = useState("");
     const [updatePage, setUpdatePage] = useState(false);
     const [addPage,setAddPage] = useState(false);
-    const coordinatorTmp ={
-        id:"",
-        username: "",
-        email:"",
-        role:"",
-        name:"",
-        title:"",
-        abd:"",
-        abbr:"",
-    };
-    const planTmp ={
-        id:"",
-        name:"",
-    };
-    const equivalentCourseTmp ={
-        id:"",
-        name:"",
-    };
     const courseTmp ={
         id:"",
         code:"",
         name:"",
         type:"",
         abd:"",
-        coordinator:coordinatorTmp,
+        coordinator:{id:"",username:""},
         bolognaLink:"",
         category:"",
-        plan:planTmp,
-        equivalent:"",
-        equivalentCourse:equivalentCourseTmp,
+        plan:{id:"",name:""},
+        equivalent:false,
+        equivalentCourse:{id:"",name:""},
     };
     const [courseForm, setCourseForm] = useState(courseTmp);
 
@@ -156,11 +138,11 @@ const CourseOperations = () => {
     const academicianOptions = [];
         academicians.map((academician)=> academicianOptions.push({ value: academician.id, label: academician.username }));
 
-    const equivalentCoursesOptions = [];
-    equivalentCourses.map((equivalentCourse)=> equivalentCoursesOptions.push({ value: equivalentCourse.id, label: equivalentCourse.name }));
+    const equivalentCourseOptions = [];
+    equivalentCourses.map((equivalentCourse)=> equivalentCourseOptions.push({ value: equivalentCourse.id, label: equivalentCourse.name }));
 
-    const plansOptions = [];
-    plans.map((plan)=> plansOptions.push({ value: plan.id, label: plan.name }));
+    const planOptions = [];
+    plans.map((plan)=> planOptions.push({ value: plan.id, label: plan.name }));
 
 
     const onDelete = (courseId) => {
@@ -210,7 +192,7 @@ const CourseOperations = () => {
         setCourseForm({ ...courseForm,plan: {id: event.target.value}})
     }
     const onChangeEquivalent = event => {
-        setCourseForm({ ...courseForm,equivalent: event.target.value})
+        setCourseForm({ ...courseForm,equivalent: event.target.value.valueOf()})
     }
     const onChangeEquivalentCourse = event => {
         setCourseForm({ ...courseForm,equivalentCourse: {id: event.target.value}})
@@ -243,13 +225,13 @@ const CourseOperations = () => {
             bolognaLink: courseForm.bolognaLink,
             category: courseForm.category,
             plan: courseForm.plan,
-            equivalent: courseForm.equivalent,
+            equivalent: courseForm.equivalent.valueOf(),
             equivalentCourse: courseForm.equivalentCourse,
         };
 
         CourseService.addCourse(courseForm.code,courseForm.name,courseForm.type,
             courseForm.abd,courseForm.coordinator,courseForm.bolognaLink,courseForm.category,courseForm.plan,
-            courseForm.equivalent,courseForm.equivalentCourse)
+            courseForm.equivalent.valueOf(),courseForm.equivalentCourse)
             .then(data => {
                 setCourseForm(courseTmp);
                 setAddPage(false);
@@ -271,13 +253,13 @@ const CourseOperations = () => {
             bolognaLink: courseForm.bolognaLink,
             category: courseForm.category,
             plan: courseForm.plan,
-            equivalent: courseForm.equivalent,
+            equivalent: courseForm.equivalent.valueOf(),
             equivalentCourse: courseForm.equivalentCourse,
         };
 
         CourseService.updateCourse(courseForm.id,courseForm.code,courseForm.name,courseForm.type,
             courseForm.abd,courseForm.coordinator,courseForm.bolognaLink,courseForm.category,courseForm.plan,
-            courseForm.equivalent,courseForm.equivalentCourse)
+            courseForm.equivalent.valueOf(),courseForm.equivalentCourse)
             .then(data => {
                 setCourseForm(courseTmp);
                 setUpdatePage(false);
@@ -299,7 +281,7 @@ const CourseOperations = () => {
             bolognaLink: course.bolognaLink,
             category: course.category,
             plan: course.plan,
-            equivalent: course.equivalent,
+            equivalent: course.equivalent.valueOf(),
             equivalentCourse: course.equivalentCourse,
         });
         setUpdatePage(true);
@@ -359,17 +341,17 @@ const CourseOperations = () => {
                                                     <td><input className="form-control input-sm" value={courseForm.bolognaLink} onChange={onChangeBolognaLink}/></td>
                                                     <td><input className="form-control input-sm" value={courseForm.category} onChange={onChangeCategory}/></td>
                                                     <td><Select className="form-control" name="plan"
-                                                                options={plansOptions}
+                                                                options={planOptions}
                                                                 onChange={handlePlanSelect}
-                                                                value={plansOptions.filter(function(option) {
+                                                                value={planOptions.filter(function(option) {
                                                                     return option.value === selectedPlanOption;
                                                                 })}
                                                     /></td>
-                                                    <td><CheckButton className="form-control input-sm" value={courseForm.equivalent} onChange={onChangeEquivalent}/></td>
+                                                    
                                                     <td><Select className="form-control" name="equivalentCourse"
-                                                                options={equivalentCoursesOptions}
+                                                                options={equivalentCourseOptions}
                                                                 onChange={handleEquivalentCourseSelect}
-                                                                value={equivalentCoursesOptions.filter(function(option) {
+                                                                value={equivalentCourseOptions.filter(function(option) {
                                                                     return option.value === selectedEquivalentCourseOption;
                                                                 })}/>
                                                     </td>
@@ -523,9 +505,9 @@ const CourseOperations = () => {
                         <div className="form-group">
                             <label htmlFor="plan">Plan</label>
                             <Select className="form-control" name="plan"
-                                    options={plansOptions}
+                                    options={planOptions}
                                     onChange={handlePlanSelect}
-                                    value={plansOptions.filter(function(option) {
+                                    value={planOptions.filter(function(option) {
                                         return option.value === selectedPlanOption;
                                     })}
                             />
@@ -545,9 +527,9 @@ const CourseOperations = () => {
                         <div className="form-group">
                             <label htmlFor="equivalentCourse">Equivalent Course</label>
                             <Select className="form-control" name="equivalentCourse"
-                                    options={equivalentCoursesOptions}
+                                    options={equivalentCourseOptions}
                                     onChange={handleEquivalentCourseSelect}
-                                    value={equivalentCoursesOptions.filter(function(option) {
+                                    value={equivalentCourseOptions.filter(function(option) {
                                         return option.value === selectedEquivalentCourseOption;
                                     })}
                             />

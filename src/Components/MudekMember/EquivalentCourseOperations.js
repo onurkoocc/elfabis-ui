@@ -1,25 +1,25 @@
 import React, {useState, useEffect, Component} from "react";
 import CheckButton from "react-validation/build/button";
 import Select from 'react-select';
-import PlanService from "../../Services/plan.service";
+import EquivalentCourseService from "../../Services/equivalentCourse.service";
 import EventBus from "../../Common/EventBus";
 import {isEmail} from "validator";
 import Input from "react-validation/build/input";
 
-const PlanOperations = () => {
-    const [plans, setPlans] = useState([]);
+const EquivalentCourseOperations = () => {
+    const [equivalentCourses, setEquivalentCourses] = useState([]);
     const [errors, setErrors] = useState("");
     const [updatePage, setUpdatePage] = useState(false);
     const [addPage, setAddPage] = useState(false);
-    const planTmp = {
+    const equivalentCourseTmp = {
         id: "",
         name:"",
     };
-    const [planForm, setPlanForm] = useState(planTmp);
+    const [equivalentCourseForm, setEquivalentCourseForm] = useState(equivalentCourseTmp);
     useEffect(() => {
-        PlanService.getAllPlans().then(
+        EquivalentCourseService.getAllEquivalentCourses().then(
             (data) => {
-                setPlans(data);
+                setEquivalentCourses(data);
                 console.log(data);
             },
             (error) => {
@@ -39,8 +39,8 @@ const PlanOperations = () => {
             }
         );
     }, [updatePage, addPage]);
-    const onDelete = (planId) => {
-        PlanService.deletePlan(planId).then(
+    const onDelete = (equivalentCourseId) => {
+        EquivalentCourseService.deleteEquivalentCourse(equivalentCourseId).then(
             () => {
                 window.location.reload();
             },
@@ -61,18 +61,18 @@ const PlanOperations = () => {
             }
         );
     };
-    const onChangePlanName = event => {
-        setPlanForm({...planForm, name: event.target.value})
+    const onChangeEquivalentCourseName = event => {
+        setEquivalentCourseForm({...equivalentCourseForm, name: event.target.value})
     }
 
-    const addPlan = () => {
+    const addEquivalentCourse = () => {
         var data = {
-            name: planForm.name,
+            name: equivalentCourseForm.name,
         };
 
-        PlanService.addPlan(planForm.name)
+        EquivalentCourseService.addEquivalentCourse(equivalentCourseForm.name)
             .then(data => {
-                setPlanForm(planTmp);
+                setEquivalentCourseForm(equivalentCourseTmp);
                 setAddPage(false);
                 console.log(data);
             })
@@ -81,16 +81,16 @@ const PlanOperations = () => {
             });
     };
 
-    const updatePlan = () => {
+    const updateEquivalentCourse = () => {
         var data = {
-            id: planForm.id,
-            name: planForm.name,
+            id: equivalentCourseForm.id,
+            name: equivalentCourseForm.name,
         };
 
-        PlanService.updatePlan(planForm.id,
-            planForm.name)
+        EquivalentCourseService.updateEquivalentCourse(equivalentCourseForm.id,
+            equivalentCourseForm.name)
             .then(data => {
-                setPlanForm(planTmp);
+                setEquivalentCourseForm(equivalentCourseTmp);
                 setUpdatePage(false);
                 console.log(data);
             })
@@ -98,18 +98,18 @@ const PlanOperations = () => {
                 console.log(e);
             });
     };
-    const newUpdateForm = (plan) => {
-        setPlanForm(planTmp);
-        setPlanForm({
-            ...planForm,
-            id: plan.id,
-            name: plan.name,
+    const newUpdateForm = (equivalentCourse) => {
+        setEquivalentCourseForm(equivalentCourseTmp);
+        setEquivalentCourseForm({
+            ...equivalentCourseForm,
+            id: equivalentCourse.id,
+            name: equivalentCourse.name,
         });
         setUpdatePage(true);
     };
 
     const newAddForm = () => {
-        setPlanForm(planTmp);
+        setEquivalentCourseForm(equivalentCourseTmp);
         setAddPage(true);
     };
 
@@ -123,7 +123,7 @@ const PlanOperations = () => {
                             {errors}
                             <div className="text-right">
                                 <button onClick={newAddForm} className="btn btn-success">
-                                    Add Plan
+                                    Add EquivalentCourse
                                 </button>
                             </div>
                             {addPage &&
@@ -133,14 +133,14 @@ const PlanOperations = () => {
                                             <table className="table">
                                                 <thead>
                                                 <tr>
-                                                    <th>PLAN NAME</th>
+                                                    <th>EQUIVALENT COURSE NAME</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <tr>
                                                     <td><input className="form-control input-sm"
-                                                               value={planForm.name} onChange={onChangePlanName}/></td>
-                                                    <td><button className="btn btn-success" onClick={() => addPlan()}>SAVE</button></td>
+                                                               value={equivalentCourseForm.name} onChange={onChangeEquivalentCourseName}/></td>
+                                                    <td><button className="btn btn-success" onClick={() => addEquivalentCourse()}>SAVE</button></td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -153,24 +153,24 @@ const PlanOperations = () => {
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>PLAN NAME</th>
+                                    <th>EQUIVALENT COURSE NAME</th>
                                     <th>DELETE</th>
                                     <th>UPDATE</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {plans.map(plan => (
-                                    <tr key={plan.id}>
-                                        <td>{plan.id}</td>
-                                        <td>{plan.name}</td>
+                                {equivalentCourses.map(equivalentCourse => (
+                                    <tr key={equivalentCourse.id}>
+                                        <td>{equivalentCourse.id}</td>
+                                        <td>{equivalentCourse.name}</td>
                                         <td>
                                             <button className="btn btn-danger"
-                                                    onClick={() => onDelete(plan.id)}>DELETE
+                                                    onClick={() => onDelete(equivalentCourse.id)}>DELETE
                                             </button>
                                         </td>
                                         <td>
                                             <button className="btn btn-primary"
-                                                    onClick={() => newUpdateForm(plan)}>UPDATE
+                                                    onClick={() => newUpdateForm(equivalentCourse)}>UPDATE
                                             </button>
                                         </td>
                                     </tr>
@@ -185,11 +185,11 @@ const PlanOperations = () => {
                     <div className="submit-form">
                         <div className="form-group">
                             <label htmlFor="id">ID</label>
-                            <h1 id="id">{planForm.id}</h1>
+                            <h1 id="id">{equivalentCourseForm.id}</h1>
                         </div>
                         <td><input className="form-control input-sm"
-                                   value={planForm.name} onChange={onChangePlanName}/></td>
-                        <button onClick={updatePlan} className="btn btn-success">
+                                   value={equivalentCourseForm.name} onChange={onChangeEquivalentCourseName}/></td>
+                        <button onClick={updateEquivalentCourse} className="btn btn-success">
                             Save
                         </button>
                     </div>
@@ -199,5 +199,5 @@ const PlanOperations = () => {
 
     );
 };
-export default PlanOperations;
+export default EquivalentCourseOperations;
 

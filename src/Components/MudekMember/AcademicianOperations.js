@@ -74,7 +74,7 @@ const AcademicianOperations = () => {
         setUserForm({ ...userForm,abbr:event.target.value})
     }
     const onChangeAbd = event => {
-        setUserForm({ ...userForm,Abd:event.target.value})
+        setUserForm({ ...userForm,abd:event.target.value})
     }
 
     const addAcademician = () => {

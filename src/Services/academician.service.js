@@ -24,13 +24,13 @@ class AcademicianService {
 
     updateAcademician = (id,username,email,role,name,title,abd,abbr) => {
         return axios.put(API_URL + "/updateacademician",{
-            id,username,email,role,name,title,abd,abbr,
+            "id":id,"username":username,"email":email,"role":role,"name":name,"title":title,"abd":abd,"abbr":abbr,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 
     addAcademician = (username,email,role,name,title,abd,abbr) => {
         return axios.post(API_URL + "/addacademician",{
-            username,email,role,name,title,abd,abbr,
+            "username":username,"email":email,"role":role,"name":name,"title":title,"abd":abd,"abbr":abbr,
         },{ headers: authHeader()}).then((response)=>{return response.data});
     };
 }
