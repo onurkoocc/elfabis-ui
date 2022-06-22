@@ -5,6 +5,7 @@ import EquivalentCourseService from "../../Services/equivalentCourse.service";
 import EventBus from "../../Common/EventBus";
 import {isEmail} from "validator";
 import Input from "react-validation/build/input";
+import AuthService from "../../Services/auth.service"
 
 const EquivalentCourseOperations = () => {
     const [equivalentCourses, setEquivalentCourses] = useState([]);
@@ -122,7 +123,8 @@ const EquivalentCourseOperations = () => {
                         <div className="list-group-flush">
                             {errors}
                             <div className="text-right">
-                                <button onClick={newAddForm} className="btn btn-success">
+                                <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                        onClick={newAddForm} className="btn btn-success">
                                     Add Equivalent Course
                                 </button>
                             </div>
@@ -142,8 +144,10 @@ const EquivalentCourseOperations = () => {
                                                                value={equivalentCourseForm.name}
                                                                onChange={onChangeEquivalentCourseName}/></td>
                                                     <td>
-                                                        <button className="btn btn-success"
-                                                                onClick={() => addEquivalentCourse()}>SAVE
+                                                        <button
+                                                            disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                                            className="btn btn-success"
+                                                            onClick={() => addEquivalentCourse()}>SAVE
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -169,12 +173,14 @@ const EquivalentCourseOperations = () => {
                                         <td>{equivalentCourse.id}</td>
                                         <td>{equivalentCourse.name}</td>
                                         <td>
-                                            <button className="btn btn-danger"
+                                            <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                                    className="btn btn-danger"
                                                     onClick={() => onDelete(equivalentCourse.id)}>DELETE
                                             </button>
                                         </td>
                                         <td>
-                                            <button className="btn btn-primary"
+                                            <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                                    className="btn btn-primary"
                                                     onClick={() => newUpdateForm(equivalentCourse)}>UPDATE
                                             </button>
                                         </td>
@@ -194,7 +200,8 @@ const EquivalentCourseOperations = () => {
                         </div>
                         <td><input className="form-control input-sm"
                                    value={equivalentCourseForm.name} onChange={onChangeEquivalentCourseName}/></td>
-                        <button onClick={updateEquivalentCourse} className="btn btn-success">
+                        <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                onClick={updateEquivalentCourse} className="btn btn-success">
                             Save
                         </button>
                     </div>

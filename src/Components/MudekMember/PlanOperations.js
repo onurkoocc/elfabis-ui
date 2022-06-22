@@ -5,6 +5,7 @@ import PlanService from "../../Services/plan.service";
 import EventBus from "../../Common/EventBus";
 import {isEmail} from "validator";
 import Input from "react-validation/build/input";
+import AuthService from "../../Services/auth.service"
 
 const PlanOperations = () => {
     const [plans, setPlans] = useState([]);
@@ -122,7 +123,8 @@ const PlanOperations = () => {
                         <div className="list-group-flush">
                             {errors}
                             <div className="text-right">
-                                <button onClick={newAddForm} className="btn btn-success">
+                                <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                        onClick={newAddForm} className="btn btn-success">
                                     Add Plan
                                 </button>
                             </div>
@@ -141,7 +143,9 @@ const PlanOperations = () => {
                                                     <td><input className="form-control input-sm"
                                                                value={planForm.name} onChange={onChangePlanName}/></td>
                                                     <td>
-                                                        <button className="btn btn-success" onClick={() => addPlan()}>SAVE
+                                                        <button
+                                                            disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                                            className="btn btn-success" onClick={() => addPlan()}>SAVE
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -167,12 +171,14 @@ const PlanOperations = () => {
                                         <td>{plan.id}</td>
                                         <td>{plan.name}</td>
                                         <td>
-                                            <button className="btn btn-danger"
+                                            <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                                    className="btn btn-danger"
                                                     onClick={() => onDelete(plan.id)}>DELETE
                                             </button>
                                         </td>
                                         <td>
-                                            <button className="btn btn-primary"
+                                            <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                                    className="btn btn-primary"
                                                     onClick={() => newUpdateForm(plan)}>UPDATE
                                             </button>
                                         </td>
@@ -192,7 +198,8 @@ const PlanOperations = () => {
                         </div>
                         <td><input className="form-control input-sm"
                                    value={planForm.name} onChange={onChangePlanName}/></td>
-                        <button onClick={updatePlan} className="btn btn-success">
+                        <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"} onClick={updatePlan}
+                                className="btn btn-success">
                             Save
                         </button>
                     </div>

@@ -43,7 +43,7 @@ const App = () => {
     };
 
     return (
-        <div>
+        <div className="card">
             <nav className="navbar navbar-expand navbar-dark bg-dark">
                 <center>
                     <Link to={"/"} className="navbar-brand">

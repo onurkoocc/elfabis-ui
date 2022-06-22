@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import AcademicianService from "../../Services/academician.service";
 import RoleService from "../../Services/role.service";
+import AuthService from "../../Services/auth.service"
 import Select from 'react-select';
 
 const AcademicianOperations = () => {
@@ -160,7 +161,8 @@ const AcademicianOperations = () => {
                         <div className="list-group-flush">
                             {errors}
                             <div className="text-right">
-                                <button onClick={newAddForm} className="btn btn-success">
+                                <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                        onClick={newAddForm} className="btn btn-success">
                                     Add Academician
                                 </button>
                             </div>
@@ -242,11 +244,15 @@ const AcademicianOperations = () => {
                                         <td>{user.abd}</td>
                                         <td>{user.abbr}</td>
                                         <td>
-                                            <button className="btn btn-danger" onClick={() => onDelete(user.id)}>DELETE
+                                            <button className="btn btn-danger"
+                                                    disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                                    onClick={() => onDelete(user.id)}>DELETE
                                             </button>
                                         </td>
                                         <td>
-                                            <button className="btn btn-primary" onClick={() => newUpdateForm(user)}>UPDATE
+                                            <button className="btn btn-primary"
+                                                    disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                                    onClick={() => newUpdateForm(user)}>UPDATE
                                             </button>
                                         </td>
                                     </tr>
@@ -354,7 +360,8 @@ const AcademicianOperations = () => {
                         </div>
 
 
-                        <button onClick={() => updateAcademician()} className="btn btn-success">
+                        <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                onClick={() => updateAcademician()} className="btn btn-success">
                             Save
                         </button>
                     </div>

@@ -7,6 +7,7 @@ import GivenCourseService from "../../Services/givenCourse.service";
 import EventBus from "../../Common/EventBus";
 import {isEmail} from "validator";
 import Input from "react-validation/build/input";
+import AuthService from "../../Services/auth.service"
 
 const FormTrackingOperations = () => {
     const [formTrackings, setFormTrackings] = useState([]);
@@ -68,6 +69,7 @@ const FormTrackingOperations = () => {
             (data) => {
                 setCommissions(data);
                 console.log(data);
+                setFormTrackingForm({...formTrackingForm, commission: []});
             },
             (error) => {
                 console.log(error);
@@ -330,7 +332,8 @@ const FormTrackingOperations = () => {
                         <div className="list-group-flush">
                             {errors}
                             <div className="text-right">
-                                <button onClick={newAddForm} className="btn btn-success">
+                                <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                        onClick={newAddForm} className="btn btn-success">
                                     Add Form Tracking
                                 </button>
                             </div>
@@ -505,8 +508,10 @@ const FormTrackingOperations = () => {
                                                         />
                                                     </td>
                                                     <td>
-                                                        <button className="btn btn-success"
-                                                                onClick={() => addFormTracking()}>SAVE
+                                                        <button
+                                                            disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                                            className="btn btn-success"
+                                                            onClick={() => addFormTracking()}>SAVE
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -566,12 +571,14 @@ const FormTrackingOperations = () => {
                                         <td>{formTracking.form3.toString()}</td>
                                         <td>{formTracking.pc.toString()}</td>
                                         <td>
-                                            <button className="btn btn-danger"
+                                            <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                                    className="btn btn-danger"
                                                     onClick={() => onDelete(formTracking.id)}>DELETE
                                             </button>
                                         </td>
                                         <td>
-                                            <button className="btn btn-primary"
+                                            <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                                    className="btn btn-primary"
                                                     onClick={() => newUpdateForm(formTracking)}>UPDATE
                                             </button>
                                         </td>
@@ -754,7 +761,8 @@ const FormTrackingOperations = () => {
                                 onChange={onChangePc}
                             />
                         </div>
-                        <button onClick={updateFormTracking} className="btn btn-success">
+                        <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                                onClick={updateFormTracking} className="btn btn-success">
                             Save
                         </button>
                     </div>
