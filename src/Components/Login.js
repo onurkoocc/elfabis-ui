@@ -1,7 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, {useState, useRef} from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import {useNavigate} from "react-router-dom";
 
 import AuthService from "../Services/auth.service";
 
@@ -24,6 +25,8 @@ const Login = (props) => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
+    const navigate = useNavigate();
+
     const onChangeUsername = (e) => {
         const username = e.target.value;
         setUsername(username);
@@ -45,7 +48,8 @@ const Login = (props) => {
         if (checkBtn.current.context._errors.length === 0) {
             AuthService.login(username, password).then(
                 () => {
-                    props.history.push("/profile");
+                    setLoading(false);
+                    navigate("/home");
                     window.location.reload();
                 },
                 (error) => {
@@ -60,8 +64,6 @@ const Login = (props) => {
                     setMessage(resMessage);
                 }
             );
-        } else {
-            setLoading(false);
         }
     };
 
@@ -110,7 +112,7 @@ const Login = (props) => {
                             </div>
                         </div>
                     )}
-                    <CheckButton style={{ display: "none" }} ref={checkBtn} />
+                    <CheckButton style={{display: "none"}} ref={checkBtn}/>
                 </Form>
             </div>
         </div>

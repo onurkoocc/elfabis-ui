@@ -134,10 +134,10 @@ const GivenCourseOperations = () => {
         setGivenCourseForm({...givenCourseForm, group: event.target.value})
     }
     const onChangeCourse = event => {
-        setGivenCourseForm({...givenCourseForm, course:{id: event.target.value}})
+        setGivenCourseForm({...givenCourseForm, course: {id: event.target.value}})
     }
     const onChangeLecturer = event => {
-        setGivenCourseForm({...givenCourseForm, lecturer:{id: event.target.value}})
+        setGivenCourseForm({...givenCourseForm, lecturer: {id: event.target.value}})
     }
 
     const handleCourseSelect = e => {
@@ -223,12 +223,12 @@ const GivenCourseOperations = () => {
 
             {!updatePage ? (
                     <div className="card">
-                        <h3 className="card-header text-center">GivenCourses</h3>
+                        <h3 className="card-header text-center">Given Courses</h3>
                         <div className="list-group-flush">
                             {errors}
                             <div className="text-right">
                                 <button onClick={newAddForm} className="btn btn-success">
-                                    Add GivenCourse
+                                    Add Given Course
                                 </button>
                             </div>
                             {addPage &&

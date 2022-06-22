@@ -1,20 +1,24 @@
 import React, {useState, useEffect} from "react";
-import  AcademicianService from "../../Services/academician.service";
+import AcademicianService from "../../Services/academician.service";
+import RoleService from "../../Services/role.service";
+import Select from 'react-select';
 
 const AcademicianOperations = () => {
     const [users, setUsers] = useState([]);
+    const [roles, setRoles] = useState([]);
     const [errors, setErrors] = useState("");
     const [updatePage, setUpdatePage] = useState(false);
-    const [addPage,setAddPage] = useState(false);
-    const userTmp ={
-        id:"",
+    const [addPage, setAddPage] = useState(false);
+    const [selectedRoleOption, setSelectedRoleOption] = useState("none");
+    const userTmp = {
+        id: "",
         username: "",
-        email:"",
-        role:"",
-        name:"",
-        title:"",
-        abd:"",
-        abbr:"",
+        email: "",
+        role: "",
+        name: "",
+        title: "",
+        abd: "",
+        abbr: "",
     };
     const [userForm, setUserForm] = useState(userTmp);
 
@@ -36,6 +40,24 @@ const AcademicianOperations = () => {
         );
     }, [updatePage]);
 
+    useEffect(() => {
+        RoleService.getAllRoles().then(
+            (data) => {
+                setRoles(data);
+            },
+            (error) => {
+                const errors =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                setErrors(errors);
+            }
+        );
+    }, [updatePage, addPage]);
+
     const onDelete = (userId) => {
         AcademicianService.deleteAcademician(userId).then(
             () => {
@@ -56,29 +78,29 @@ const AcademicianOperations = () => {
 
 
     const onChangeName = event => {
-        setUserForm({ ...userForm,name:event.target.value})
+        setUserForm({...userForm, name: event.target.value})
     }
     const onChangeUsername = event => {
-        setUserForm({ ...userForm,username:event.target.value})
+        setUserForm({...userForm, username: event.target.value})
     }
     const onChangeRole = event => {
-        setUserForm({ ...userForm,role:event.target.value})
+        setUserForm({...userForm, role: event.target.value})
     }
     const onChangeEmail = event => {
-        setUserForm({ ...userForm,email:event.target.value})
+        setUserForm({...userForm, email: event.target.value})
     }
     const onChangeTitle = event => {
-        setUserForm({ ...userForm,title:event.target.value})
+        setUserForm({...userForm, title: event.target.value})
     }
     const onChangeAbbr = event => {
-        setUserForm({ ...userForm,abbr:event.target.value})
+        setUserForm({...userForm, abbr: event.target.value})
     }
     const onChangeAbd = event => {
-        setUserForm({ ...userForm,abd:event.target.value})
+        setUserForm({...userForm, abd: event.target.value})
     }
 
     const addAcademician = () => {
-        AcademicianService.addAcademician(userForm.username,userForm.email,userForm.role,userForm.name,userForm.title,userForm.abd,userForm.abbr)
+        AcademicianService.addAcademician(userForm.username, userForm.email, userForm.role, userForm.name, userForm.title, userForm.abd, userForm.abbr)
             .then(data => {
                 setUserForm(userTmp);
                 setAddPage(false);
@@ -91,7 +113,7 @@ const AcademicianOperations = () => {
 
     const updateAcademician = () => {
 
-        AcademicianService.updateAcademician(userForm.id,userForm.username,userForm.email,userForm.role,userForm.name,userForm.title,userForm.abd,userForm.abbr)
+        AcademicianService.updateAcademician(userForm.id, userForm.username, userForm.email, userForm.role, userForm.name, userForm.title, userForm.abd, userForm.abbr)
             .then(data => {
                 setUserForm(userTmp);
                 setUpdatePage(false);
@@ -103,15 +125,16 @@ const AcademicianOperations = () => {
     };
     const newUpdateForm = (user) => {
         setUserForm(userTmp);
-        setUserForm({ ...userForm,
-            id:user.id,
+        setUserForm({
+            ...userForm,
+            id: user.id,
             username: user.username,
-            email:user.email,
-            role:user.role.name,
-            name:user.name,
-            title:user.title,
-            abd:user.abd,
-            abbr:user.abbr,
+            email: user.email,
+            role: user.role.name,
+            name: user.name,
+            title: user.title,
+            abd: user.abd,
+            abbr: user.abbr,
         });
         setUpdatePage(true);
     };
@@ -119,6 +142,13 @@ const AcademicianOperations = () => {
     const newAddForm = () => {
         setUserForm(userTmp);
         setAddPage(true);
+    };
+
+    const roleOptions = [];
+    roles.map((role) => roleOptions.push({value: role.id, label: role.name}));
+    const handleRoleSelect = e => {
+        setSelectedRoleOption(e.value);
+        setUserForm({...userForm, role: {id: e.value, name: e.label}});
     };
 
     return (
@@ -130,7 +160,7 @@ const AcademicianOperations = () => {
                         <div className="list-group-flush">
                             {errors}
                             <div className="text-right">
-                                <button onClick={newAddForm} className="btn btn-success" >
+                                <button onClick={newAddForm} className="btn btn-success">
                                     Add Academician
                                 </button>
                             </div>
@@ -153,14 +183,30 @@ const AcademicianOperations = () => {
                                                 </thead>
                                                 <tbody>
                                                 <tr>
-                                                    <td><input className="form-control input-sm" value={userForm.title} onChange={onChangeTitle}/></td>
-                                                    <td><input className="form-control input-sm" value={userForm.name} onChange={onChangeName}/></td>
-                                                    <td><input className="form-control input-sm" value={userForm.username} onChange={onChangeUsername}/></td>
-                                                    <td><input className="form-control input-sm" value={userForm.email} onChange={onChangeEmail}/></td>
-                                                    <td><input className="form-control input-sm" value={userForm.role} onChange={onChangeRole}/></td>
-                                                    <td><input className="form-control input-sm" value={userForm.abd} onChange={onChangeAbd}/></td>
-                                                    <td><input className="form-control input-sm" value={userForm.abbr} onChange={onChangeAbbr}/></td>
-                                                    <td><button className="btn btn-success" onClick={() => addAcademician()}>SAVE</button></td>
+                                                    <td><input className="form-control input-sm" value={userForm.title}
+                                                               onChange={onChangeTitle}/></td>
+                                                    <td><input className="form-control input-sm" value={userForm.name}
+                                                               onChange={onChangeName}/></td>
+                                                    <td><input className="form-control input-sm" value={userForm.username}
+                                                               onChange={onChangeUsername}/></td>
+                                                    <td><input className="form-control input-sm" value={userForm.email}
+                                                               onChange={onChangeEmail}/></td>
+                                                    <td><Select className="form-control" name="role"
+                                                                options={roleOptions}
+                                                                onChange={handleRoleSelect}
+                                                                value={roleOptions.filter(function (option) {
+                                                                    return option.value === selectedRoleOption;
+                                                                })}
+                                                    /></td>
+                                                    <td><input className="form-control input-sm" value={userForm.abd}
+                                                               onChange={onChangeAbd}/></td>
+                                                    <td><input className="form-control input-sm" value={userForm.abbr}
+                                                               onChange={onChangeAbbr}/></td>
+                                                    <td>
+                                                        <button className="btn btn-success"
+                                                                onClick={() => addAcademician()}>SAVE
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -195,8 +241,14 @@ const AcademicianOperations = () => {
                                         <td>{user.role.name}</td>
                                         <td>{user.abd}</td>
                                         <td>{user.abbr}</td>
-                                        <td><button className="btn btn-danger" onClick={() => onDelete(user.id)}>DELETE</button></td>
-                                        <td><button className="btn btn-primary" onClick={() => newUpdateForm(user)}>UPDATE</button></td>
+                                        <td>
+                                            <button className="btn btn-danger" onClick={() => onDelete(user.id)}>DELETE
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button className="btn btn-primary" onClick={() => newUpdateForm(user)}>UPDATE
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))}
 
@@ -204,10 +256,9 @@ const AcademicianOperations = () => {
                             </table>
 
 
-
                         </div>
                     </div>
-                ):
+                ) :
                 (
                     <div className="submit-form">
                         <div className="form-group">
@@ -267,14 +318,12 @@ const AcademicianOperations = () => {
 
                         <div className="form-group">
                             <label htmlFor="role">Role</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="role"
-                                required
-                                value={userForm.role}
-                                onChange={onChangeRole}
-                                name="role"
+                            <Select className="form-control" name="role"
+                                    options={roleOptions}
+                                    onChange={handleRoleSelect}
+                                    value={roleOptions.filter(function (option) {
+                                        return option.value === selectedRoleOption;
+                                    })}
                             />
                         </div>
 
@@ -305,8 +354,7 @@ const AcademicianOperations = () => {
                         </div>
 
 
-
-                        <button onClick={()=>updateAcademician()} className="btn btn-success">
+                        <button onClick={() => updateAcademician()} className="btn btn-success">
                             Save
                         </button>
                     </div>

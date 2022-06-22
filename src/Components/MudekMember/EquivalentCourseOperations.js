@@ -13,7 +13,7 @@ const EquivalentCourseOperations = () => {
     const [addPage, setAddPage] = useState(false);
     const equivalentCourseTmp = {
         id: "",
-        name:"",
+        name: "",
     };
     const [equivalentCourseForm, setEquivalentCourseForm] = useState(equivalentCourseTmp);
     useEffect(() => {
@@ -118,12 +118,12 @@ const EquivalentCourseOperations = () => {
 
             {!updatePage ? (
                     <div className="card">
-                        <h3 className="card-header text-center">PLANS</h3>
+                        <h3 className="card-header text-center">Equivalent Courses</h3>
                         <div className="list-group-flush">
                             {errors}
                             <div className="text-right">
                                 <button onClick={newAddForm} className="btn btn-success">
-                                    Add EquivalentCourse
+                                    Add Equivalent Course
                                 </button>
                             </div>
                             {addPage &&
@@ -139,8 +139,13 @@ const EquivalentCourseOperations = () => {
                                                 <tbody>
                                                 <tr>
                                                     <td><input className="form-control input-sm"
-                                                               value={equivalentCourseForm.name} onChange={onChangeEquivalentCourseName}/></td>
-                                                    <td><button className="btn btn-success" onClick={() => addEquivalentCourse()}>SAVE</button></td>
+                                                               value={equivalentCourseForm.name}
+                                                               onChange={onChangeEquivalentCourseName}/></td>
+                                                    <td>
+                                                        <button className="btn btn-success"
+                                                                onClick={() => addEquivalentCourse()}>SAVE
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>

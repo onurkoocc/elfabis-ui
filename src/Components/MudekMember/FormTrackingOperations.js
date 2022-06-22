@@ -19,7 +19,7 @@ const FormTrackingOperations = () => {
     const [addPage, setAddPage] = useState(false);
     const formTrackingTmp = {
         id: "",
-        givenCourse: {id:"",name:""},
+        givenCourse: {id: "", name: ""},
         commission: [],
         area1: false,
         area2: false,
@@ -39,29 +39,6 @@ const FormTrackingOperations = () => {
         pc: false,
     };
     const [formTrackingForm, setFormTrackingForm] = useState(formTrackingTmp);
-    useEffect(() => {
-        AcademicianService.getAllAcademicians().then(
-            (data) => {
-                setCommissions(data);
-                console.log(data);
-            },
-            (error) => {
-                console.log(error);
-                const errors =
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message ||
-                    error.toString();
-
-                setErrors(errors);
-
-                if (error.response && error.response.status === 401) {
-                    EventBus.dispatch("logout");
-                }
-            }
-        );
-    }, [updatePage, addPage]);
     useEffect(() => {
         FormTrackingService.getAllFormTrackings().then(
             (data) => {
@@ -85,6 +62,31 @@ const FormTrackingOperations = () => {
             }
         );
     }, [updatePage, addPage]);
+
+    useEffect(() => {
+        AcademicianService.getAllCommissioners().then(
+            (data) => {
+                setCommissions(data);
+                console.log(data);
+            },
+            (error) => {
+                console.log(error);
+                const errors =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                setErrors(errors);
+
+                if (error.response && error.response.status === 401) {
+                    EventBus.dispatch("logout");
+                }
+            }
+        );
+    }, [updatePage, addPage]);
+
     useEffect(() => {
         GivenCourseService.getAllGivenCourses().then(
             (data) => {
@@ -113,7 +115,11 @@ const FormTrackingOperations = () => {
     commissions.map((academician) => commissionOptions.push({value: academician.id, label: academician.username}));
 
     const givenCourseOptions = [];
-    givenCourses.map((givenCourse) => givenCourseOptions.push({value: givenCourse.id, label: givenCourse.course.name}));
+    givenCourses.map((givenCourse) =>
+        givenCourseOptions.push({
+            value: givenCourse.id,
+            label: givenCourse.course != null ? givenCourse.course.name : ""
+        }));
 
     const onDelete = (formTrackingId) => {
         FormTrackingService.deleteFormTracking(formTrackingId).then(
@@ -195,7 +201,7 @@ const FormTrackingOperations = () => {
         setSelectedCommissionOption(e.value);
         const commissionTmp = formTrackingForm.commission;
         commissionTmp.push({id: e.value, username: e.label});
-        setFormTrackingForm({...formTrackingForm, commission:commissionTmp});
+        setFormTrackingForm({...formTrackingForm, commission: commissionTmp});
     };
 
     const addFormTracking = () => {
@@ -542,7 +548,7 @@ const FormTrackingOperations = () => {
                                     <tr key={formTracking.id}>
                                         <td>{formTracking.id}</td>
                                         <td>{formTracking.givenCourse != null ? formTracking.givenCourse.course.name : null}</td>
-                                        <td>{formTracking.commission != null ? ( formTracking.commission.map(academician=>academician.username+"\n")): null}</td>
+                                        <td>{formTracking.commission != null ? (formTracking.commission.map(academician => academician.username + "\n")) : null}</td>
                                         <td>{formTracking.area1.toString()}</td>
                                         <td>{formTracking.area2.toString()}</td>
                                         <td>{formTracking.area3.toString()}</td>

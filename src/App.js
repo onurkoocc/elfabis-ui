@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { Routes, Route, Link, Switch } from "react-router-dom";
+import {Routes, Route, Link, Switch} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -17,6 +17,7 @@ import GivenCourseOperations from "./Components/MudekMember/GivenCourseOperation
 import FormTrackingOperations from "./Components/MudekMember/FormTrackingOperations";
 import EquivalentCourseOperations from "./Components/MudekMember/EquivalentCourseOperations";
 import PlanOperations from "./Components/MudekMember/PlanOperations";
+
 const App = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
 
@@ -42,120 +43,120 @@ const App = () => {
     };
 
     return (
-      <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
-            <center>
-          <Link to={"/"} className="navbar-brand">
-            <img  alt={"/"} src={logoNav} height={"35px"} />
-                ELFABIS
-          </Link>
-            </center>
-          <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
-                Home
-              </Link>
-            </li>
-          </div>
+        <div>
+            <nav className="navbar navbar-expand navbar-dark bg-dark">
+                <center>
+                    <Link to={"/"} className="navbar-brand">
+                        <img alt={"/"} src={logoNav} height={"35px"}/>
+                        ELFABIS
+                    </Link>
+                </center>
+                <div className="navbar-nav mr-auto">
+                    <li className="nav-item">
+                        <Link to={"/home"} className="nav-link">
+                            Home
+                        </Link>
+                    </li>
+                </div>
 
-          {currentUser ? (
+                {currentUser ? (
 
-              <div className="navbar-nav collapse navbar-collapse justify-content-end">
-                  <div className="navbar-nav mr-auto">
-                      <li className="nav-item">
-                          <Link to={"/academicians"} className="nav-link">
-                              Users
-                          </Link>
-                      </li>
-                  </div>
-                  <div className="navbar-nav mr-auto">
-                      <li className="nav-item">
-                          <Link to={"/courses"} className="nav-link">
-                              Courses
-                          </Link>
-                      </li>
-                  </div>
-                  <div className="navbar-nav mr-auto">
-                      <li className="nav-item">
-                          <Link to={"/givenCourses"} className="nav-link">
-                              Given Courses
-                          </Link>
-                      </li>
-                  </div>
-                  <div className="navbar-nav mr-auto">
-                      <li className="nav-item">
-                          <Link to={"/formTrackings"} className="nav-link">
-                              Form Tracking
-                          </Link>
-                      </li>
-                  </div>
-                  <div className="navbar-nav mr-auto">
-                      <li className="nav-item">
-                          <Link to={"/plans"} className="nav-link">
-                              Plan
-                          </Link>
-                      </li>
-                  </div>
-                  <div className="navbar-nav mr-auto">
-                      <li className="nav-item">
-                          <Link to={"/equivalentcourses"} className="nav-link">
-                              Equivalent Course
-                          </Link>
-                      </li>
-                  </div>
-                <ul>
-                <li className="nav-item">
-                  <Link to={"/profile"} className="nav-link">
-                    {currentUser.username}
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <a href="/login" className="nav-link" onClick={logOut}>
-                    LogOut
-                  </a>
-                </li>
-                </ul>
-              </div>
+                    <div className="navbar-nav collapse navbar-collapse justify-content-end">
+                        <div className="navbar-nav mr-auto">
+                            <li className="nav-item">
+                                <Link to={"/academicians"} className="nav-link">
+                                    Users
+                                </Link>
+                            </li>
+                        </div>
+                        <div className="navbar-nav mr-auto">
+                            <li className="nav-item">
+                                <Link to={"/courses"} className="nav-link">
+                                    Courses
+                                </Link>
+                            </li>
+                        </div>
+                        <div className="navbar-nav mr-auto">
+                            <li className="nav-item">
+                                <Link to={"/givenCourses"} className="nav-link">
+                                    Given Courses
+                                </Link>
+                            </li>
+                        </div>
+                        <div className="navbar-nav mr-auto">
+                            <li className="nav-item">
+                                <Link to={"/formTrackings"} className="nav-link">
+                                    Form Tracking
+                                </Link>
+                            </li>
+                        </div>
+                        <div className="navbar-nav mr-auto">
+                            <li className="nav-item">
+                                <Link to={"/plans"} className="nav-link">
+                                    Plan
+                                </Link>
+                            </li>
+                        </div>
+                        <div className="navbar-nav mr-auto">
+                            <li className="nav-item">
+                                <Link to={"/equivalentcourses"} className="nav-link">
+                                    Equivalent Course
+                                </Link>
+                            </li>
+                        </div>
+                        <ul>
+                            <li className="nav-item">
+                                <Link to={"/profile"} className="nav-link">
+                                    {currentUser.username}
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <a href="/login" className="nav-link" onClick={logOut}>
+                                    LogOut
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
 
-          ) : (
-              <div className="navbar-nav collapse navbar-collapse justify-content-end">
-                <ul>
-                <li className="nav-item">
-                  <Link to={"/login"} className="nav-link">
-                    Login
-                  </Link>
-                </li>
+                ) : (
+                    <div className="navbar-nav collapse navbar-collapse justify-content-end">
+                        <ul>
+                            <li className="nav-item">
+                                <Link to={"/login"} className="nav-link">
+                                    Login
+                                </Link>
+                            </li>
 
-                <li className="nav-item">
-                  <Link to={"/register"} className="nav-link">
-                    Sign Up
-                  </Link>
-                </li>
-                </ul>
-              </div>
-          )}
-        </nav>
-          <div className="container mt-3">
-            <Routes>
-                <Route exact path={"/"} element={<Home />} />
-                <Route exact path={"/home"} element={<Home />} />
-                    <Route exact path="/academicians" element={<AcademicianOperations />} />
-                    <Route exact path="/courses" element={<CourseOperations />} />
-                    <Route exact path="/givenCourses" element={<GivenCourseOperations />} />
-                    <Route exact path="/formTrackings" element={<FormTrackingOperations />} />
-                <Route exact path="/equivalentcourses" element={<EquivalentCourseOperations />} />
-                <Route exact path="/plans" element={<PlanOperations />} />
-                    <Route exact path="/profile" element={<Profile />} />
+                            <li className="nav-item">
+                                <Link to={"/register"} className="nav-link">
+                                    Sign Up
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                )}
+            </nav>
+            <div className="container mt-3">
+                <Routes>
+                    <Route exact path={"/"} element={<Home/>}/>
+                    <Route exact path={"/home"} element={<Home/>}/>
+                    <Route exact path="/academicians" element={<AcademicianOperations/>}/>
+                    <Route exact path="/courses" element={<CourseOperations/>}/>
+                    <Route exact path="/givenCourses" element={<GivenCourseOperations/>}/>
+                    <Route exact path="/formTrackings" element={<FormTrackingOperations/>}/>
+                    <Route exact path="/equivalentcourses" element={<EquivalentCourseOperations/>}/>
+                    <Route exact path="/plans" element={<PlanOperations/>}/>
+                    <Route exact path="/profile" element={<Profile/>}/>
 
 
-                    <Route exact path="/login" element={<Login />} />
-                    <Route exact path="/register" element={<Register />} />
+                    <Route exact path="/login" element={<Login/>}/>
+                    <Route exact path="/register" element={<Register/>}/>
 
-            </Routes>
+                </Routes>
+            </div>
+            {/* <AuthVerify logOut={logOut}/> */}
         </div>
-        {/* <AuthVerify logOut={logOut}/> */}
-      </div>
-  );
+    );
 };
 
 export default App;

@@ -13,7 +13,7 @@ const PlanOperations = () => {
     const [addPage, setAddPage] = useState(false);
     const planTmp = {
         id: "",
-        name:"",
+        name: "",
     };
     const [planForm, setPlanForm] = useState(planTmp);
     useEffect(() => {
@@ -118,7 +118,7 @@ const PlanOperations = () => {
 
             {!updatePage ? (
                     <div className="card">
-                        <h3 className="card-header text-center">PLANS</h3>
+                        <h3 className="card-header text-center">Plans</h3>
                         <div className="list-group-flush">
                             {errors}
                             <div className="text-right">
@@ -140,7 +140,10 @@ const PlanOperations = () => {
                                                 <tr>
                                                     <td><input className="form-control input-sm"
                                                                value={planForm.name} onChange={onChangePlanName}/></td>
-                                                    <td><button className="btn btn-success" onClick={() => addPlan()}>SAVE</button></td>
+                                                    <td>
+                                                        <button className="btn btn-success" onClick={() => addPlan()}>SAVE
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>

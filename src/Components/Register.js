@@ -1,8 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, {useState, useRef} from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-import { isEmail } from "validator";
+import {isEmail} from "validator";
+import {useNavigate} from "react-router-dom";
+
 
 import AuthService from "../Services/auth.service";
 
@@ -56,6 +58,8 @@ const Register = (props) => {
     const [successful, setSuccessful] = useState(false);
     const [message, setMessage] = useState("");
 
+    const navigate = useNavigate();
+
     const onChangeUsername = (e) => {
         const username = e.target.value;
         setUsername(username);
@@ -84,6 +88,7 @@ const Register = (props) => {
                 (response) => {
                     setMessage(response.data.message);
                     setSuccessful(true);
+                    navigate("/login");
                 },
                 (error) => {
                     const resMessage =
@@ -160,7 +165,7 @@ const Register = (props) => {
                             </div>
                         </div>
                     )}
-                    <CheckButton style={{ display: "none" }} ref={checkBtn} />
+                    <CheckButton style={{display: "none"}} ref={checkBtn}/>
                 </Form>
             </div>
         </div>
