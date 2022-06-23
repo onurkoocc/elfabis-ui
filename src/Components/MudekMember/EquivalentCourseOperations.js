@@ -9,6 +9,8 @@ import AuthService from "../../Services/auth.service"
 
 const EquivalentCourseOperations = () => {
     const [equivalentCourses, setEquivalentCourses] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [selectedEquivalentCourse, setSelectedEquivalentCourse] = useState("None");
     const [errors, setErrors] = useState("");
     const [updatePage, setUpdatePage] = useState(false);
     const [addPage, setAddPage] = useState(false);
@@ -62,6 +64,24 @@ const EquivalentCourseOperations = () => {
             }
         );
     };
+
+    const showCourses = (id, name) => {
+        var data = {
+            id: id,
+            name: name,
+        };
+
+        EquivalentCourseService.getAllCoursesByEquivalentCourse(id)
+            .then(data => {
+                setCourses(data);
+                setSelectedEquivalentCourse(name);
+                console.log(data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    };
+
     const onChangeEquivalentCourseName = event => {
         setEquivalentCourseForm({...equivalentCourseForm, name: event.target.value})
     }
@@ -165,6 +185,7 @@ const EquivalentCourseOperations = () => {
                                     <th>EQUIVALENT COURSE NAME</th>
                                     <th>DELETE</th>
                                     <th>UPDATE</th>
+                                    <th>SHOW COURSES</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -184,6 +205,50 @@ const EquivalentCourseOperations = () => {
                                                     onClick={() => newUpdateForm(equivalentCourse)}>UPDATE
                                             </button>
                                         </td>
+                                        <td>
+                                            <button
+                                                className="btn btn-warning" onClick={() => showCourses(equivalentCourse.id,equivalentCourse.name)}>SHOW COURSES
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div>
+                            <center><h3 htmlFor="coursesforequivalentcourse">Selected Equivalent Course : {selectedEquivalentCourse}</h3></center>
+                            <table className="table" name="coursesforequivalentcourse">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>CODE</th>
+                                    <th>NAME</th>
+                                    <th>TYPE</th>
+                                    <th>ABD</th>
+                                    <th>COORDINATOR</th>
+                                    <th>BOLOGNA LINK</th>
+                                    <th>CATEGORY</th>
+                                    <th>PLAN</th>
+                                    <th>EQUIVALENT</th>
+                                    <th>EQUIVALENT COURSE</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {courses.map(course => (
+                                    <tr key={course.id}>
+                                        <td>{course.id}</td>
+                                        <td>{course.code}</td>
+                                        <td>{course.name}</td>
+                                        <td>{course.type}</td>
+                                        <td>{course.abd}</td>
+                                        <td>{(course.coordinator != null) ? course.coordinator.name : null}</td>
+                                        <td>{course.bolognaLink}</td>
+                                        <td>{course.category}</td>
+                                        <td>{(course.plan != null) ? course.plan.name : null}</td>
+                                        <td>{course.equivalent}</td>
+                                        <td>{(course.equivalentCourse != null) ? course.equivalentCourse.name : null}</td>
                                     </tr>
                                 ))}
 

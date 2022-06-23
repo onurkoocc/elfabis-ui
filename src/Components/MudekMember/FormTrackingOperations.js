@@ -7,10 +7,12 @@ import GivenCourseService from "../../Services/givenCourse.service";
 import EventBus from "../../Common/EventBus";
 import {isEmail} from "validator";
 import Input from "react-validation/build/input";
+
 import AuthService from "../../Services/auth.service"
 
 const FormTrackingOperations = () => {
     const [formTrackings, setFormTrackings] = useState([]);
+    const [formTrackingsCompleted, setFormTrackingsCompleted] = useState([]);
     const [selectedGivenCourseOption, setSelectedGivenCourseOption] = useState("none");
     const [selectedCommissionOption, setSelectedCommissionOption] = useState([]);
     const [givenCourses, setGivenCourses] = useState([]);
@@ -44,6 +46,30 @@ const FormTrackingOperations = () => {
         FormTrackingService.getAllFormTrackings().then(
             (data) => {
                 setFormTrackings(data);
+                console.log(data);
+            },
+            (error) => {
+                console.log(error);
+                const errors =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                setErrors(errors);
+
+                if (error.response && error.response.status === 401) {
+                    EventBus.dispatch("logout");
+                }
+            }
+        );
+    }, [updatePage, addPage]);
+
+    useEffect(() => {
+        FormTrackingService.getAllCompletedFormTrackings().then(
+            (data) => {
+                setFormTrackingsCompleted(data);
                 console.log(data);
             },
             (error) => {
@@ -145,6 +171,16 @@ const FormTrackingOperations = () => {
             }
         );
     };
+
+    function compareCanUpdate(commission) {
+        const userIds = [];
+        commission.map(academician => userIds.push(academician.id));
+        if(AuthService.getCurrentUser().roles[0]==="MUDEKMEMBER"){
+            return false;
+        }
+        return !userIds.includes(AuthService.getCurrentUser().id);
+    }
+
     const onChangeArea1 = event => {
         setFormTrackingForm({...formTrackingForm, area1: !formTrackingForm.area1})
     }
@@ -577,11 +613,64 @@ const FormTrackingOperations = () => {
                                             </button>
                                         </td>
                                         <td>
-                                            <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
-                                                    className="btn btn-primary"
-                                                    onClick={() => newUpdateForm(formTracking)}>UPDATE
+                                            <button
+                                                disabled={(formTracking.commission!=null?compareCanUpdate(formTracking.commission):true)}
+                                                className="btn btn-primary"
+                                                onClick={() => newUpdateForm(formTracking)}>UPDATE
                                             </button>
                                         </td>
+                                    </tr>
+                                ))}
+
+                                </tbody>
+                            </table>
+                            <center><h3 htmlFor="completed">Completed Form Trackings</h3></center>
+                            <table className="table" name="completed">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>GIVEN COURSE</th>
+                                    <th>COMMISSION</th>
+                                    <th>AREA1</th>
+                                    <th>AREA2</th>
+                                    <th>AREA3</th>
+                                    <th>AREA4</th>
+                                    <th>AREA5</th>
+                                    <th>AREA6</th>
+                                    <th>AREA7</th>
+                                    <th>AREA8</th>
+                                    <th>AREA9</th>
+                                    <th>AREA10</th>
+                                    <th>AREA11</th>
+                                    <th>AREA12</th>
+                                    <th>AREA13</th>
+                                    <th>FORM2</th>
+                                    <th>FORM3</th>
+                                    <th>PC</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {formTrackingsCompleted.map(formTracking => (
+                                    <tr key={formTracking.id}>
+                                        <td>{formTracking.id}</td>
+                                        <td>{formTracking.givenCourse != null ? formTracking.givenCourse.course.name : null}</td>
+                                        <td>{formTracking.commission != null ? (formTracking.commission.map(academician => academician.username + "\n")) : null}</td>
+                                        <td>{formTracking.area1.toString()}</td>
+                                        <td>{formTracking.area2.toString()}</td>
+                                        <td>{formTracking.area3.toString()}</td>
+                                        <td>{formTracking.area4.toString()}</td>
+                                        <td>{formTracking.area5.toString()}</td>
+                                        <td>{formTracking.area6.toString()}</td>
+                                        <td>{formTracking.area7.toString()}</td>
+                                        <td>{formTracking.area8.toString()}</td>
+                                        <td>{formTracking.area9.toString()}</td>
+                                        <td>{formTracking.area10.toString()}</td>
+                                        <td>{formTracking.area11.toString()}</td>
+                                        <td>{formTracking.area12.toString()}</td>
+                                        <td>{formTracking.area13.toString()}</td>
+                                        <td>{formTracking.form2.toString()}</td>
+                                        <td>{formTracking.form3.toString()}</td>
+                                        <td>{formTracking.pc.toString()}</td>
                                     </tr>
                                 ))}
 
@@ -761,7 +850,7 @@ const FormTrackingOperations = () => {
                                 onChange={onChangePc}
                             />
                         </div>
-                        <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
+                        <button
                                 onClick={updateFormTracking} className="btn btn-success">
                             Save
                         </button>

@@ -14,6 +14,15 @@ class EquivalentCourseService {
             });
     };
 
+    getAllCoursesByEquivalentCourse = (equivalentCourseId) => {
+        return axios
+            .get(API_URL + "/" + equivalentCourseId + "/getallcoursesbyequivalentcourse", {headers: authHeader()}
+            )
+            .then((response) => {
+                return response.data;
+            });
+    };
+
     deleteEquivalentCourse = (equivalentCourseId) => {
         return axios
             .delete(API_URL + "/" + equivalentCourseId, {headers: authHeader()}

@@ -14,6 +14,15 @@ class PlanService {
             });
     };
 
+    getAllCoursesByPlan = (planId) => {
+        return axios
+            .get(API_URL+"/"+planId+"/getallcoursesbyplan", {headers: authHeader()}
+            )
+            .then((response) => {
+                return response.data;
+            });
+    };
+
     deletePlan = (planId) => {
         return axios
             .delete(API_URL + "/" + planId, {headers: authHeader()}
@@ -47,6 +56,8 @@ class PlanService {
             return response.data
         });
     };
+
+
 
 
 }

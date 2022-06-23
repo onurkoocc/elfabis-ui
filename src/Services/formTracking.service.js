@@ -13,6 +13,14 @@ class FormTrackingService {
                 return response.data;
             });
     };
+    getAllCompletedFormTrackings = () => {
+        return axios
+            .get(API_URL + "/getallcompleted", {headers: authHeader()}
+            )
+            .then((response) => {
+                return response.data;
+            });
+    };
 
     deleteFormTracking = (id) => {
         return axios
