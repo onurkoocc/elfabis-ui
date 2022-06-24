@@ -32,37 +32,33 @@ class CourseService {
             });
     };
 
-    updateCourse = (id, code, name, type, abd, coordinator, bolognaLink, category, plan, equivalent, equivalentCourse) => {
+    updateCourse = (id, code, name, type, abd, coordinator, bolognaLink, category, plan, equivalentCourse) => {
         return axios.put(API_URL, {
             "id": id,
             "code": code,
             "name": name,
             "type": type,
             "abd": abd,
-            "coordinator": coordinator
-            ,
+            "coordinator": coordinator,
             "bolognaLink": bolognaLink,
             "category": category,
             "plan": plan,
-            "equivalent": equivalent,
             "equivalentCourse": equivalentCourse,
         }, {headers: authHeader()}).then((response) => {
             return response.data
         });
     };
 
-    addCourse = (code, name, type, abd, coordinator, bolognaLink, category, plan, equivalent, equivalentCourse) => {
+    addCourse = (code, name, type, abd, coordinator, bolognaLink, category, plan, equivalentCourse) => {
         return axios.post(API_URL, {
             "code": code,
             "name": name,
             "type": type,
             "abd": abd,
-            "coordinator": coordinator
-            ,
+            "coordinator": coordinator,
             "bolognaLink": bolognaLink,
             "category": category,
             "plan": plan,
-            "equivalent": equivalent,
             "equivalentCourse": equivalentCourse,
         }, {headers: authHeader()}).then((response) => {
             return response.data

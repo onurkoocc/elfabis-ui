@@ -31,9 +31,8 @@ const CourseOperations = () => {
         coordinator: {id: "", username: ""},
         bolognaLink: "",
         category: "",
-        plan: {id: "", name: ""},
-        equivalent: false,
-        equivalentCourse: {id: "", name: ""},
+        plan: "",
+        equivalentCourse: null,
     };
     const [courseForm, setCourseForm] = useState(courseTmp);
 
@@ -193,9 +192,6 @@ const CourseOperations = () => {
     const onChangePlan = event => {
         setCourseForm({...courseForm, plan: {id: event.target.value}})
     }
-    const onChangeEquivalent = event => {
-        setCourseForm({...courseForm, equivalent: event.target.value.valueOf()})
-    }
     const onChangeEquivalentCourse = event => {
         setCourseForm({...courseForm, equivalentCourse: {id: event.target.value}})
     }
@@ -226,13 +222,12 @@ const CourseOperations = () => {
             bolognaLink: courseForm.bolognaLink,
             category: courseForm.category,
             plan: courseForm.plan,
-            equivalent: courseForm.equivalent.valueOf(),
             equivalentCourse: courseForm.equivalentCourse,
         };
 
         CourseService.addCourse(courseForm.code, courseForm.name, courseForm.type,
             courseForm.abd, courseForm.coordinator, courseForm.bolognaLink, courseForm.category, courseForm.plan,
-            courseForm.equivalent.valueOf(), courseForm.equivalentCourse)
+            courseForm.equivalentCourse)
             .then(data => {
                 setCourseForm(courseTmp);
                 setAddPage(false);
@@ -254,13 +249,12 @@ const CourseOperations = () => {
             bolognaLink: courseForm.bolognaLink,
             category: courseForm.category,
             plan: courseForm.plan,
-            equivalent: courseForm.equivalent.valueOf(),
             equivalentCourse: courseForm.equivalentCourse,
         };
 
         CourseService.updateCourse(courseForm.id, courseForm.code, courseForm.name, courseForm.type,
             courseForm.abd, courseForm.coordinator, courseForm.bolognaLink, courseForm.category, courseForm.plan,
-            courseForm.equivalent.valueOf(), courseForm.equivalentCourse)
+            courseForm.equivalentCourse)
             .then(data => {
                 setCourseForm(courseTmp);
                 setUpdatePage(false);
@@ -283,7 +277,6 @@ const CourseOperations = () => {
             bolognaLink: course.bolognaLink,
             category: course.category,
             plan: course.plan,
-            equivalent: course.equivalent.valueOf(),
             equivalentCourse: course.equivalentCourse,
         });
         setUpdatePage(true);
@@ -357,13 +350,14 @@ const CourseOperations = () => {
                                                                     return option.value === selectedPlanOption;
                                                                 })}
                                                     /></td>
-
                                                     <td><Select className="form-control" name="equivalentCourse"
                                                                 options={equivalentCourseOptions}
                                                                 onChange={handleEquivalentCourseSelect}
                                                                 value={equivalentCourseOptions.filter(function (option) {
                                                                     return option.value === selectedEquivalentCourseOption;
-                                                                })}/>
+                                                                })}
+                                                                defaultValue={null}
+                                                                />
                                                     </td>
                                                     <td>
                                                         <button
@@ -410,7 +404,6 @@ const CourseOperations = () => {
                                         <td>{course.bolognaLink}</td>
                                         <td>{course.category}</td>
                                         <td>{(course.plan != null) ? course.plan.name : null}</td>
-                                        <td>{course.equivalent}</td>
                                         <td>{(course.equivalentCourse != null) ? course.equivalentCourse.name : null}</td>
                                         <td>
                                             <button disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
@@ -534,18 +527,6 @@ const CourseOperations = () => {
                                     value={planOptions.filter(function (option) {
                                         return option.value === selectedPlanOption;
                                     })}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="equivalent">Equivalent</label>
-                            <input
-                                type="checkbox"
-                                className="form-control"
-                                id="equivalent"
-                                required
-                                value={courseForm.equivalent}
-                                onChange={onChangeEquivalent}
-                                name="equivalent"
                             />
                         </div>
                         <div className="form-group">

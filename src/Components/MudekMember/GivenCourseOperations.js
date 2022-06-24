@@ -24,7 +24,7 @@ const GivenCourseOperations = () => {
         lecturer: "",
         year: "",
         semester: "",
-        group: "",
+        courseGroup: "",
     };
     const [givenCourseForm, setGivenCourseForm] = useState(givenCourseTmp);
     useEffect(() => {
@@ -132,7 +132,7 @@ const GivenCourseOperations = () => {
         setGivenCourseForm({...givenCourseForm, semester: event.target.value})
     }
     const onChangeGroup = event => {
-        setGivenCourseForm({...givenCourseForm, group: event.target.value})
+        setGivenCourseForm({...givenCourseForm, courseGroup: event.target.value})
     }
     const onChangeCourse = event => {
         setGivenCourseForm({...givenCourseForm, course: {id: event.target.value}})
@@ -157,14 +157,14 @@ const GivenCourseOperations = () => {
             lecturer: givenCourseForm.lecturer,
             year: givenCourseForm.year,
             semester: givenCourseForm.semester,
-            group: givenCourseForm.group,
+            courseGroup: givenCourseForm.courseGroup,
         };
 
         GivenCourseService.addGivenCourse(givenCourseForm.course,
             givenCourseForm.lecturer,
             givenCourseForm.year,
             givenCourseForm.semester,
-            givenCourseForm.group)
+            givenCourseForm.courseGroup)
             .then(data => {
                 setGivenCourseForm(givenCourseTmp);
                 setAddPage(false);
@@ -182,7 +182,7 @@ const GivenCourseOperations = () => {
             lecturer: givenCourseForm.lecturer,
             year: givenCourseForm.year,
             semester: givenCourseForm.semester,
-            group: givenCourseForm.group,
+            courseGroup: givenCourseForm.courseGroup,
         };
 
         GivenCourseService.updateGivenCourse(givenCourseForm.id,
@@ -190,7 +190,7 @@ const GivenCourseOperations = () => {
             givenCourseForm.lecturer,
             givenCourseForm.year,
             givenCourseForm.semester,
-            givenCourseForm.group)
+            givenCourseForm.courseGroup)
             .then(data => {
                 setGivenCourseForm(givenCourseTmp);
                 setUpdatePage(false);
@@ -209,7 +209,7 @@ const GivenCourseOperations = () => {
             lecturer: givenCourse.lecturer,
             year: givenCourse.year,
             semester: givenCourse.semester,
-            group: givenCourse.group,
+            courseGroup: givenCourse.courseGroup,
         });
         setUpdatePage(true);
     };
@@ -270,7 +270,7 @@ const GivenCourseOperations = () => {
                                                                value={givenCourseForm.semester}
                                                                onChange={onChangeSemester}/></td>
                                                     <td><input className="form-control input-sm"
-                                                               value={givenCourseForm.group} onChange={onChangeGroup}/></td>
+                                                               value={givenCourseForm.courseGroup} onChange={onChangeGroup}/></td>
                                                     <td>
                                                         <button
                                                             disabled={AuthService.getCurrentUser().roles[0] != "MUDEKMEMBER"}
@@ -389,7 +389,7 @@ const GivenCourseOperations = () => {
                                 className="form-control"
                                 id="group"
                                 required
-                                value={givenCourseForm.group}
+                                value={givenCourseForm.courseGroup}
                                 onChange={onChangeGroup}
                                 name="group"
                             />
